@@ -1,0 +1,300 @@
+Bill:
+  bill_id: varchar(50)
+  cust_id: varchar(50)
+  order_id: varchar(255)
+  resttable_no: int(11)
+  created_at: timestamp
+  waiter_no: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - bill_id
+    - keyname: cust_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - cust_id
+    - keyname: order_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - order_id
+    - keyname: resttable_no
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - resttable_no
+    - keyname: waiter_no
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - waiter_no
+  foreign_keys:
+    - column: cust_id
+      references: Customer.cust_id
+      on_delete: cascade
+    - column: resttable_no
+      references: RestaurantTable.resttable_no
+      on_delete: cascade
+    - column: waiter_no
+      references: Waiter.waiter_no
+      on_delete: cascade
+    - column: order_id
+      references: Order.order_id
+      on_delete: cascade
+
+Customer:
+  cust_id: varchar(50)
+  name: varchar(255)
+  contact: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - cust_id
+
+InventoryLevels:
+  inventory_id: varchar(255)
+  product_id: varchar(50)
+  instock_quantity: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - inventory_id
+    - keyname: product_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - product_id
+  foreign_keys:
+    - column: product_id
+      references: Product.product_id
+      on_delete: cascade
+
+InventoryOrderHistory:
+  invorder_id: varchar(255)
+  product_id: varchar(50)
+  datetime_ordered: timestamp
+  amount: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - invorder_id
+  foreign_keys:
+    - column: product_id
+      references: Product.product_id
+      on_delete: cascade
+
+Menu:
+  menu_id: varchar(255)
+  product_id: varchar(50)
+  product_details: varchar(255)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - menu_id
+  foreign_keys:
+    - column: product_id
+      references: Product.product_id
+      on_delete: cascade
+
+Order:
+  order_id: varchar(255)
+  cust_id: varchar(255)
+  resttable_no: int(11)
+  waiter_no: int(11)
+  date_time: timestamp
+  status: varchar(255)
+  order_amount: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - order_id
+    - keyname: cust_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - cust_id
+    - keyname: resttable_no
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - resttable_no
+    - keyname: waiter_no
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - waiter_no
+  foreign_keys:
+    - column: cust_id
+      references: Customer.cust_id
+      on_delete: cascade
+    - column: resttable_no
+      references: RestaurantTable.resttable_no
+      on_delete: cascade
+    - column: waiter_no
+      references: Waiter.waiter_no
+      on_delete: cascade
+
+Order_Items:
+  orderitems_id: varchar(255)
+  order_id: varchar(50)
+  product_id: varchar(50)
+  quantity: int(11)
+  total_price: decimal(10,2)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - orderitems_id
+    - keyname: order_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - order_id
+    - keyname: product_id
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - product_id
+  foreign_keys:
+    - column: order_id
+      references: Order.order_id
+      on_delete: cascade
+    - column: product_id
+      references: Product.product_id
+      on_delete: cascade
+
+Product:
+  product_id: varchar(50)
+  product_name: varchar(255)
+  description: text
+  price: decimal(10,2)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - product_id
+
+RestaurantTable:
+  resttable_no: int(11)
+  capacity: int(11)
+  location: varchar(255)
+  status: varchar(255)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - resttable_no
+
+Waiter:
+  waiter_no: int(11)
+  name: varchar(255)
+  contact: int(11)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - waiter_no
+ProductNames:
+  name_id:
+    type: varchar(50)
+    primary: true
+  product_name:
+    type: text
+
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - name_id
+
+Reservation:
+  reserve_id:
+    type: varchar(255)
+    primary: true
+  cust_id:
+    type: varchar(50)
+  resttable_no:
+    type: int(11)
+  no_of_seats:
+    type: int(11)
+  date:
+    type: date
+  time:
+    type: time
+
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - reserve_id
+    - keyname: resttable_no
+      type: BTREE
+      unique: false
+      packed: false
+      columns:
+        - resttable_no
+
+  foreignKeys:
+    - column: cust_id
+      references: Customer.cust_id
+    - column: resttable_no
+      references: RestaurantTable.resttable_no
+
+Product_Category:
+  category_id:
+    type: varchar(50)
+    primary: true
+  category:
+    type: varchar(255)
+  indexes:
+    - keyname: PRIMARY
+      type: BTREE
+      unique: true
+      packed: false
+      columns:
+        - category_id
+Foreign_Keys:
+  - column: category_id
+    references: Product(product_id)
+    on: delete
