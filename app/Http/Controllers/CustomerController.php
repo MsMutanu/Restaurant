@@ -2,63 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Get all customers
     public function index()
     {
-        //
+        $customers = Customer::all();
+        return response()->json($customers);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Create a new customer
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'contact' => 'required|numeric',
+        ]);
+
+        $customer = Customer::create($validatedData);
+
+        return response()->json([
+            'message' => 'Customer created successfully',
+            'customer' => $customer,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Get a single customer by id
+    public function show($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        return response()->json($customer);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Update a customer by id
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'contact' => 'required|numeric',
+        ]);
+
+        $customer = Customer::findOrFail($id);
+        $customer->update($validatedData);
+
+        return response()->json([
+            'message' => 'Customer updated successfully',
+            'customer' => $customer,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Delete a customer by id
+    public function destroy($id)
     {
-        //
-    }
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => 'Customer deleted successfully',
+        ]);
     }
 }

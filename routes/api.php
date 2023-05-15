@@ -31,10 +31,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('bill', BillController::class);
-Route::resource('customer', CustomerController::class);
-Route::resource('inventorylevel', InventoryLevelsController::class);
-Route::resource('inventoryorderhistory', InventoryOrderHistoryController::class);
+Route::resource('Bill', BillController::class);
+Route::resource('Customer', CustomerController::class);
+Route::resource('InventoryLevel', InventoryLevelsController::class);
+Route::resource('InventoryOrderHistory', InventoryOrderHistoryController::class);
 Route::resource('Menu', MenuController::class);
 Route::resource('Order', OrderController::class);
 Route::resource('OrderItem', OrderItemController::class);
