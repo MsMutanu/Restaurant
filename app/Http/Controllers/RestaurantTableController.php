@@ -3,62 +3,81 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\RestaurantTable;
 
 class RestaurantTableController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $tables = RestaurantTable::all();
+        return response()->json($tables, 200);
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'resttable_no' => 'required|integer',
+            'availability' => 'required',
+            'capacity' => 'required|integer',
+        ]);
+
+        $table = RestaurantTable::create($validatedData);
+        return response()->json($table, 201);
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $table = RestaurantTable::findOrFail($id);
+        return response()->json($table, 200);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'resttable_no' => 'required|integer',
+            'availability' => 'required',
+            'capacity' => 'required|integer',
+        ]);
+
+        $table = RestaurantTable::findOrFail($id);
+        $table->update($validatedData);
+        return response()->json($table, 200);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $table = RestaurantTable::findOrFail($id);
+        $table->delete();
+        return response()->json(null, 204);
     }
 }

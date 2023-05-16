@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bill;
-use Illuminate\Http\Response;
-
 
 class BillController extends Controller
 {
@@ -17,7 +15,7 @@ class BillController extends Controller
     public function index()
     {
         $bills = Bill::all();
-        return response()->json($bills);
+        return response()->json($bills, 200);
     }
 
     /**
@@ -28,14 +26,15 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        $bill = new Bill;
-        $bill->cust_id = $request->input('cust_id');
-        $bill->order_id = $request->input('order_id');
-        $bill->resttable_no = $request->input('resttable_no');
-        $bill->waiter_no = $request->input('waiter_no');
-        $bill->save();
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'order_id' => 'required',
+            'resttable_no' => 'required',
+            'waiter_no' => 'required'
+        ]);
 
-        return response()->json($bill);
+        $bill = Bill::create($validatedData);
+        return response()->json($bill, 201);
     }
 
     /**
@@ -46,11 +45,8 @@ class BillController extends Controller
      */
     public function show($id)
     {
-        $bill = Bill::find($id);
-        if (!$bill) {
-            return response()->json(['error' => 'Bill not found'], 404);
-        }
-        return response()->json($bill);
+        $bill = Bill::findOrFail($id);
+        return response()->json($bill, 200);
     }
 
     /**
@@ -62,17 +58,16 @@ class BillController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $bill = Bill::find($id);
-        if (!$bill) {
-            return response()->json(['error' => 'Bill not found'], 404);
-        }
-        $bill->cust_id = $request->input('cust_id');
-        $bill->order_id = $request->input('order_id');
-        $bill->resttable_no = $request->input('resttable_no');
-        $bill->waiter_no = $request->input('waiter_no');
-        $bill->save();
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'order_id' => 'required',
+            'resttable_no' => 'required',
+            'waiter_no' => 'required'
+        ]);
 
-        return response()->json($bill);
+        $bill = Bill::findOrFail($id);
+        $bill->update($validatedData);
+        return response()->json($bill, 200);
     }
 
     /**
@@ -83,12 +78,8 @@ class BillController extends Controller
      */
     public function destroy($id)
     {
-        $bill = Bill::find($id);
-        if (!$bill) {
-            return response()->json(['error' => 'Bill not found'], 404);
-        }
+        $bill = Bill::findOrFail($id);
         $bill->delete();
-
-        return response()->json(['message' => 'Bill deleted successfully']);
+        return response()->json(null, 204);
     }
 }

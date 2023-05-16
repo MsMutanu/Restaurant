@@ -7,42 +7,83 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return Order::all();
+        $orders = Order::all();
+        return response()->json($orders, 200);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $order = new Order;
-        $order->cust_id = $request->cust_id;
-        $order->resttable_no = $request->resttable_no;
-        $order->waiter_no = $request->waiter_no;
-        $order->status = 'pending';
-        $order->order_amount = 0;
-        $order->save();
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'resttable_no' => 'required|integer',
+            'waiter_no' => 'required|integer',
+            'date_time' => 'required|date',
+            'status' => 'required',
+            'order_amount' => 'required|numeric',
+        ]);
 
-        return $order;
+        $order = Order::create($validatedData);
+        return response()->json($order, 201);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        return Order::findOrFail($id);
+        $order = Order::findOrFail($id);
+        return response()->json($order, 200);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
-        $order->update($request->all());
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'resttable_no' => 'required|integer',
+            'waiter_no' => 'required|integer',
+            'date_time' => 'required|date',
+            'status' => 'required',
+            'order_amount' => 'required|numeric',
+        ]);
 
-        return $order;
+        $order = Order::findOrFail($id);
+        $order->update($validatedData);
+        return response()->json($order, 200);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         $order = Order::findOrFail($id);
         $order->delete();
-
-        return 204;
+        return response()->json(null, 204);
     }
 }

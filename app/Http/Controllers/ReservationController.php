@@ -3,62 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reservation;
 
 class ReservationController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $reservations = Reservation::all();
+        return response()->json($reservations, 200);
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'resttable_no' => 'required|integer',
+            'no_of_seats' => 'required|integer',
+            'date' => 'required|date',
+            'time' => 'required',
+        ]);
+
+        $reservation = Reservation::create($validatedData);
+        return response()->json($reservation, 201);
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $reservation = Reservation::findOrFail($id);
+        return response()->json($reservation, 200);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'cust_id' => 'required',
+            'resttable_no' => 'required|integer',
+            'no_of_seats' => 'required|integer',
+            'date' => 'required|date',
+            'time' => 'required',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+        $reservation->update($validatedData);
+        return response()->json($reservation, 200);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $reservation = Reservation::findOrFail($id);
+        $reservation->delete();
+        return response()->json(null, 204);
     }
 }
