@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RestaurantTable;
+use Illuminate\Support\Str;
 
 class RestaurantTableController extends Controller
 {
@@ -32,7 +33,13 @@ class RestaurantTableController extends Controller
             'capacity' => 'required|integer',
         ]);
 
-        $table = RestaurantTable::create($validatedData);
+        $table = new RestaurantTable;
+        $table->resttable_id = 'TAB'. Str::random(4);
+        $table-> resttable_no = $request->input('resttable_no');
+        $table->availability = $request->input('availability');
+        $table ->capacity = $request ->input('capacity');
+        $table->save();
+        
         return response()->json($table, 201);
     }
 

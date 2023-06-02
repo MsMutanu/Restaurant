@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ReservationController extends Controller
 {
@@ -24,19 +27,47 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'cust_id' => 'required',
-            'resttable_no' => 'required|integer',
-            'no_of_seats' => 'required|integer',
-            'date' => 'required|date',
-            'time' => 'required',
-        ]);
+   
 
-        $reservation = Reservation::create($validatedData);
-        return response()->json($reservation, 201);
+public function store(Request $request)
+{
+    // Define the validation rules
+    $rules = [
+        'cust_id' => 'required|exists:Customer,cust_id',
+        'resttable_no' => 'required|integer',
+        'no_of_seats' => 'required|integer',
+        'date' => 'required|date',
+        'time' => 'required',
+    ];
+
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
+
+    // Validation passed, create the reservation
+    $reservation = new Reservation;
+    $reservation->reserve_id= 'RES'.str::random(4);
+    $reservation->cust_id = $request->input('cust_id');
+    $reservation->resttable_no = $request->input('resttable_no');
+    $reservation->no_of_seats = $request->input('no_of_seats');
+    $reservation->date = $request->input('date');
+    $reservation->time = $request->input('time');
+
+    // Check if the cust_id corresponds to an existing customer
+    $existingCustomer = Customer::find($reservation->cust_id);
+    if (!$existingCustomer) {
+        return response()->json(['error' => 'Invalid cust_id'], 400);
+    }
+
+    $reservation->save();
+
+    return response()->json($reservation, 201);
+}
+
 
     /**
      * Display the specified resource.

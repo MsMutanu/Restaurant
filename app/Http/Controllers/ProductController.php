@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCategory;
+use App\Models\ProductName;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -24,30 +28,51 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'category_id' => 'required',
-            'price' => 'required',
-            'details' => 'required',
-        ]);
+    
+public function store(Request $request)
+{
+    // Define the validation rules
+    $rules = [
+        'product_id' => 'required|string|max:255',
+        'name_id' => 'required|exists:ProductNames,name_id',
+        'category_id' => 'required|exists:ProductCategory,category_id',
+        'product_price' => 'required|numeric',
+        'product_details' => 'required|string',
+    ];
 
-        $product = Product::create($validatedData);
-        return response()->json($product, 201);
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        return response()->json($product, 200);
+    // Validation passed, create the product
+    $product = new Product;
+    $product->product_id = $request->input('product_id');
+    $product->name_id = $request->input('name_id');
+    $product->category_id = $request->input('category_id');
+    $product->product_price = $request->input('product_price');
+    $product->product_details = $request->input('product_details');
+
+    // Check if the name_id corresponds to an existing name
+    $existingName = ProductName::find($product->name_id);
+    if (!$existingName) {
+        return response()->json(['error' => 'Invalid name_id'], 400);
     }
+
+    // Check if the category_id corresponds to an existing category
+    $existingCategory = ProductCategory::find($product->category_id);
+    if (!$existingCategory) {
+        return response()->json(['error' => 'Invalid category_id'], 400);
+    }
+
+    $product->save();
+
+    return response()->json($product, 201);
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -59,10 +84,10 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
+            'name_id' => 'required',
             'category_id' => 'required',
-            'price' => 'required',
-            'details' => 'required',
+            'product_price' => 'required',
+            'product_details' => 'required',
         ]);
 
         $product = Product::findOrFail($id);

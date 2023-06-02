@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
@@ -22,7 +24,11 @@ class CustomerController extends Controller
             'contact' => 'required|numeric',
         ]);
 
-        $customer = Customer::create($validatedData);
+        $customer = new Customer;
+        $customer->cust_id = 'CUST' .Str::random(4); // Generate a random string with 4 characters
+        $customer->name = $request->input('name');
+        $customer->contact = $request->input('contact');
+        $customer-> save();
 
         return response()->json([
             'message' => 'Customer created successfully',

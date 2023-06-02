@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Waiter;
+use Illuminate\Support\Str;
 
 class WaiterController extends Controller
 {
@@ -32,7 +33,13 @@ class WaiterController extends Controller
             'waiter_no' => 'required|integer',
         ]);
 
-        $waiter = Waiter::create($validatedData);
+        $waiter = new Waiter;
+        $waiter->wait_id = 'WAIT'. Str::random(4);
+        $waiter->name = $request->input('name');
+        $waiter->contact = $request->input('contact');
+        $waiter->waiter_no = $request->input('waiter_no');
+        $waiter->save();
+        
         return response()->json($waiter, 201);
     }
 

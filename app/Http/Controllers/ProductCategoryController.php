@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
+use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -30,7 +31,10 @@ class ProductCategoryController extends Controller
             'category' => 'required',
         ]);
 
-        $category = ProductCategory::create($validatedData);
+        $category = new ProductCategory;
+        $category->category_id = 'Cat' .Str::random(4); // Generate a random string with 4 characters
+        $category->category = $request->input('category');
+        $category->save();
         return response()->json($category, 201);
     }
 
@@ -61,7 +65,10 @@ class ProductCategoryController extends Controller
 
         $category = ProductCategory::findOrFail($id);
         $category->update($validatedData);
-        return response()->json($category, 200);
+        return response()->json([
+        'message' => 'Category updated successfuly',
+        'category' => $category
+        ], 200);
     }
 
     /**
@@ -74,6 +81,8 @@ class ProductCategoryController extends Controller
     {
         $category = ProductCategory::findOrFail($id);
         $category->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Category deleted successfuly'
+        ], 204);
     }
 }

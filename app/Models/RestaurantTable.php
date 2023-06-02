@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property string $resttable_id
  * @property int $resttable_no
- * @property string $availability
+ * @property bool $availability
  * @property int $capacity
  * 
  * @property Collection|Bill[] $bills

@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\InventoryOrderHistory;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class InventoryOrderHistoryController extends Controller
 {
@@ -25,13 +28,31 @@ class InventoryOrderHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'product_id' => 'required',
+        $rules = [
+            'product_id' => 'required|exists:Product,product_id',
             'datetime_ordered' => 'required',
             'amount' => 'required|integer'
-        ]);
+        ];
+
+        // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }   
+        $inventoryOrderHistory = new InventoryOrderHistory;
+        $inventoryOrderHistory-> invorder_id = 'INV'. Str::random(4);
+        $inventoryOrderHistory-> product_id = $request->input('product_id');
+        $inventoryOrderHistory->amount = $request->input('amount');
+
+ // Check if the product_id corresponds to an existing product
+ $existingProduct = Product::find($inventoryOrderHistory->product_id);
+ if (!$existingProduct) {
+     return response()->json(['error' => 'Invalid product_id'], 400);
+ }
+        $inventoryOrderHistory->save();
         
-        $inventoryOrderHistory = InventoryOrderHistory::create($validatedData);
         return response()->json($inventoryOrderHistory, 201);
     }
 

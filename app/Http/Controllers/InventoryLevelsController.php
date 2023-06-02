@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\InventoryLevel;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class InventoryLevelsController extends Controller
 {
@@ -25,18 +27,42 @@ class InventoryLevelsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'inventory_id' => 'required|string|max:255',
-            'product_id' => 'required|string|max:50',
-            'instock_quantity' => 'required|integer',
-        ]);
+   
 
-        $inventoryLevel = InventoryLevel::create($validatedData);
+public function store(Request $request)
+{
+    // Define the validation rules
+    $rules = [
+        'inventory_id' => 'required|string|max:255',
+        'product_id' => 'required|exists:Product,product_id',
+        'instock_quantity' => 'required|integer',
+    ];
 
-        return response()->json($inventoryLevel, 201);
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
+
+    // Validation passed, create the inventory level
+    $inventoryLevel = new InventoryLevel;
+    $inventoryLevel->inventory_id = 'STOCK' . Str::random(4); // Generate a random string with 4 characters
+    $inventoryLevel->product_id = $request->input('product_id');
+    $inventoryLevel->instock_quantity = $request->input('instock_quantity');
+    
+    // Check if the product_id corresponds to an existing product
+    $existingProduct = Product::find($inventoryLevel->product_id);
+    if (!$existingProduct) {
+        return response()->json(['error' => 'Invalid product_id'], 400);
+    }
+
+    $inventoryLevel->save();
+
+    return response()->json($inventoryLevel, 201);
+}
+
 
     /**
      * Display the specified resource.

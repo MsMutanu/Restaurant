@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
@@ -26,13 +29,31 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'product' => 'required',
+        $rules = [
+            'product_id' => 'required|exists:Product,product_id',
             'product_details' => 'required',
-            'price' => 'required|numeric',
-        ]);
+            
+        ];
+     // Validate the request data
+     $validator = Validator::make($request->all(), $rules);
 
-        $menu = Menu::create($validatedData);
+     // Check if validation fails
+     if ($validator->fails()) {
+         return response()->json(['errors' => $validator->errors()], 400);
+     }   
+
+        $menu = new Menu;
+        $menu->menu_id = 'Menu' .Str::random(4); // Generate a random string with 4 characters
+        $menu->product_id = $request->input('product_id');
+        $menu->product_details = $request->input('product_details');
+
+ // Check if the product_id corresponds to an existing product
+ $existingProduct = Product::find($menu->product_id);
+ if (!$existingProduct) {
+     return response()->json(['error' => 'Invalid product_id'], 400);
+ }
+
+        $menu->save();
         return response()->json($menu, 201);
     }
 

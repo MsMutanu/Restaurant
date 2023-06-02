@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProductName;
+use Illuminate\Support\Str;
 
 class ProductNameController extends Controller
 {
@@ -30,7 +31,12 @@ class ProductNameController extends Controller
             'product_name' => 'required',
         ]);
 
-        $productName = ProductName::create($validatedData);
+        $productName = new ProductName;
+        $productName ->name_id =  'Nam' .Str::random(4); // Generate a random string with 4 characters
+        $productName->product_name = $request->input('product_name');
+                $productName->save();
+
+
         return response()->json($productName, 201);
     }
 
@@ -61,7 +67,11 @@ class ProductNameController extends Controller
 
         $productName = ProductName::findOrFail($id);
         $productName->update($validatedData);
-        return response()->json($productName, 200);
+        return response()->json([
+            'message' => 'Product Name Updated Successfully',
+            'product_name' => $productName
+            ], 200);
+            
     }
 
     /**
@@ -74,6 +84,9 @@ class ProductNameController extends Controller
     {
         $productName = ProductName::findOrFail($id);
         $productName->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Product Name Deleted Successfully',
+            
+        ], 204);
     }
 }

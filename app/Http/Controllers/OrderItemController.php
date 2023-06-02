@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class OrderItemController extends Controller
 {
@@ -26,12 +30,39 @@ class OrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'order_id' => 'required',
-            'product_id' => 'required',
-        ]);
+        // Define the validation rules
+    $rules = [
+        'order_id' => 'required|exists:Order,order_id',
+        'product_id' => 'required|exists:Product,product_id',
+        ];
 
-        $orderItem = OrderItem::create($validatedData);
+         // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+        $orderItem = new OrderItem;
+        $orderItem->orderitems_id = 'Item'. Str::random(4);
+        $orderItem-> order_id = $request->input('order_id');
+        $orderItem->product_id = $request->input('product_id');
+        
+     // Check if the product_id corresponds to an existing product
+     $existingProduct = Product::find($orderItem->product_id);
+     if (!$existingProduct) {
+         return response()->json(['error' => 'Invalid product_id'], 400);
+     }
+
+      // Check if the order_id corresponds to an existing order
+    $existingOrder = Order::find($orderItem->order_id);
+    if (!$existingOrder) {
+        return response()->json(['error' => 'Invalid order_id'], 400);
+    }
+
+        $orderItem->save();
+
         return response()->json($orderItem, 201);
     }
 
