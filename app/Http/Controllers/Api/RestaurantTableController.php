@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RestaurantTable;
 use Illuminate\Support\Str;
@@ -72,7 +73,9 @@ class RestaurantTableController extends Controller
 
         $table = RestaurantTable::findOrFail($id);
         $table->update($validatedData);
-        return response()->json($table, 200);
+        return response()->json([
+            'message'=> 'Table Updated Successfuly',
+            'table' => $table, 200]);
     }
 
     /**
@@ -85,6 +88,7 @@ class RestaurantTableController extends Controller
     {
         $table = RestaurantTable::findOrFail($id);
         $table->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'message'=> 'Table deleted', 204]);
     }
 }

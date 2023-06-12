@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Waiter;
 use Illuminate\Support\Str;
@@ -72,7 +73,8 @@ class WaiterController extends Controller
 
         $waiter = Waiter::findOrFail($id);
         $waiter->update($validatedData);
-        return response()->json($waiter, 200);
+        return response()->json(['message'=> 'Waiter updated successfully',
+        'waiter' => $waiter, 200]);
     }
 
     /**
@@ -85,6 +87,8 @@ class WaiterController extends Controller
     {
         $waiter = Waiter::findOrFail($id);
         $waiter->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Waiter deleted successfuly'
+            ,204]);
     }
 }

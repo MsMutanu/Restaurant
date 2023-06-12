@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Menu;
@@ -79,14 +80,17 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'product' => 'required',
+            'product_id' => 'required',
             'product_details' => 'required',
-            'price' => 'required|numeric',
         ]);
 
         $menu = Menu::findOrFail($id);
         $menu->update($validatedData);
-        return response()->json($menu, 200);
+        return response()->json([
+            'message'=> 'Menu item updated succesfuly',
+            'menu' => $menu
+
+        ], 200);
     }
 
     /**
@@ -99,6 +103,8 @@ class MenuController extends Controller
     {
         $menu = Menu::findOrFail($id);
         $menu->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            'message'=> 'Menu item deleted succesfuly'
+        ], 204);
     }
 }

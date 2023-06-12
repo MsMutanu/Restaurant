@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
 class RestaurantTable extends Model
 {
 	protected $table = 'RestaurantTable';
+
+	protected $primaryKey = 'resttable_id';
 	public $incrementing = false;
 	public $timestamps = false;
 

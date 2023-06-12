@@ -60,11 +60,11 @@ class Bill extends Model
 
 	public function restaurant_table()
 	{
-		return $this->belongsTo(RestaurantTable::class, 'resttable_no', 'resttable_no');
+		return $this->belongsTo(RestaurantTable::class, 'resttable_id', 'resttable_no');
 	}
 
 	public function waiter()
 	{
-		return $this->belongsTo(Waiter::class, 'waiter_no', 'waiter_no');
+		return $this->belongsTo(Waiter::class, 'wait_id', 'waiter_no');
 	}
 }

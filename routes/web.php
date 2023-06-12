@@ -9,7 +9,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductNameController;
+use App\Http\Controllers\ProductNamesController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantTableController;
 use App\Http\Controllers\WaiterController;
@@ -33,89 +33,43 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/bill', [BillController::class,'index']);
-// Route::get('/bill/{bill_id}', [BillController::class,'show']);
-// Route::post('/newbill', [BillController::class,'store']);
-// Route::put('/updatebill/{bill_id}', [BillController::class, 'update']);
-// Route::delete('/deletebill/{bill_id}', [BillController::class,'destroy']);
+//Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
 
-// Route::get('/customer', [CustomerController::class, 'index']);
-// Route::get('/customers/{cust_id}', [CustomerController::class, 'show']);
-// Route::post('/newcustomer', [CustomerController::class, 'store']);
-// Route::put('/updatecustomer/{cust_id}', [CustomerController::class, 'update']);
-// Route::delete('/deletecustomer/{cust_id}', [CustomerController::class, 'destroy']);
+Auth::routes();
 
-// Route::get('/inventorylevels', [InventoryLevelsController::class,'index']);
-// Route::post('/addinventorylevels', [InventoryLevelsController::class,'store']);
-// Route::get('/inventorylevels/{inventory_id}', [InventoryLevelsController::class,'show']);
-// Route::put('/updateinventorylevels/{inventory_id}', [InventoryLevelsController::class,'update']);
-// Route::delete('/deleteinventorylevels/{inventory_id}', [InventoryLevelsController::class,'destroy']);
+// Auth protected web routes
 
+Route::group(['middleware' => ['web', 'auth']], function () {
 
-// Route::get('/order', [OrderController:: class, 'index']);
-// Route::post('/neworder', [OrderController:: class, 'store']);
-// Route::get('/order/{order_id}', [OrderController:: class, 'show']);
-// Route::put('/updateorder/{order_id}', [OrderController:: class, 'update']);
-// Route::delete('/deleteorder/{order_id}', [OrderController:: class, 'destroy']);
+  Route::get('home', 'HomeController@index')->name('home');
 
-// Route::get('/customer', [CustomerController::class,'index']);
-// Route::get('/customer/{cust_id}', [CustomerController::class,'show']);
-// Route::post('/newcustomer', [CustomerController::class,'store']);
-// Route::put('/updatecustomer/{cust_id}', [CustomerController::class, 'update']);
-// Route::delete('/deletecustomer/{cust_id}', [CustomerController::class,'destroy']);
+});
 
-// Route::get('/invorder', [InventoryOrderHistoryController::class,'index']);
-// Route::get('/invorder/{invorder_id}', [InventoryOrderHistoryController::class,'show']);
-// Route::post('/newinvorder_id', [InventoryOrderHistoryController::class,'store']);
-// Route::put('/updateinvorder/{invorder_id}', [InventoryOrderHistoryController::class, 'update']);
-// Route::delete('/deleteinvorder/{invorder_id}', [InventoryOrderHistoryController::class,'destroy']);
+// Auth protected API routes
 
-// Route::get('/menu', [MenuController:: class, 'index']);
-// Route::post('/newmenu', [MenuController:: class, 'store']);
-// Route::get('/menu/{menu_id}', [MenuController:: class, 'show']);
-// Route::put('/updatemenu/{menu_id}', [MenuController:: class, 'update']);
-// Route::delete('/deletemenu/{menu_id}', [MenuController:: class, 'destroy']);
+Route::middleware('auth:api')->group( function(){
 
-// Route::get('/orderitem', [OrderItemController:: class, 'index']);
-// Route::post('/neworderitem', [OrderItemController:: class, 'store']);
-// Route::get('/orderitem/{orderitems_id}', [OrderItemController:: class, 'show']);
-// Route::put('/updateorderitem/{orderitems_id}', [OrderItemController:: class, 'update']);
-// Route::delete('/deleteorderitem/{orderitems_id}', [OrderItemController:: class, 'destroy']);
+Route::get('/admin/productnames', [ProductNamesController::class, 'index'])->name('productnames.index');
+Route::get('/admin/productnames/create', [ProductNamesController::class, 'create'])->name('productnames.create');
+Route::post('/admin/productnames', [ProductNamesController::class, 'store'])->name('productnames.store');
+Route::get('/admin/productnames/{name_id}', [ProductNamesController::class, 'show'])->name('productnames.show');
+Route::get('/admin/productnames/{name_id}/edit', [ProductNamesController::class, 'edit'])->name('productnames.edit');
+Route::put('/admin/productnames/{name_id}', [ProductNamesController::class, 'update'])->name('productnames.update');
+Route::delete('/admin/productnames/{name_id}', [ProductNamesController::class, 'destroy'])->name('productnames.destroy');
 
-// Route::get('/product', [ProductController:: class, 'index']);
-// Route::post('/newproduct', [ProductController:: class, 'store']);
-// Route::get('/product/{product_id}', [ProductController:: class, 'show']);
-// Route::put('/updateproduct/{product_id}', [ProductController:: class, 'update']);
-// Route::delete('/deleteproduct/{product_id}', [ProductController:: class, 'destroy']);
+Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/admin/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/admin/products/{product_id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/admin/products/{product_id}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/admin/products/{product_id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-// Route::get('/category', [ProductCategoryController:: class, 'index']);
-// Route::post('/newcategory', [ProductCategoryController:: class, 'store']);
-// Route::get('/category/{category_id}', [ProductCategoryController:: class, 'show']);
-// Route::put('/updatecategory/{category_id}', [ProductCategoryController:: class, 'update']);
-// Route::delete('/deletecategory/{category_id}', [ProductCategoryController:: class, 'destroy']);
+Route::get('/productcategory', [ProductCategoryController::class, 'index'])->name('admin.productcategory.index');
+Route::get('/admin/productcategory/create', [ProductCategoryController::class, 'create'])->name('productcategory.create');
+Route::post('/admin/productcategory', [ProductCategoryController::class, 'store'])->name('admin.productcategory.store');
+Route::get('/admin/productcategory/{category_id}/edit', [ProductCategoryController::class, 'edit'])->name('productcategory.edit');
+Route::put('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'update'])->name('admin.productcategory.update');
+Route::delete('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'destroy'])->name('admin.productcategory.destroy');
+Route::get('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'show'])->name('admin.productcategory.show');
 
-// Route::get('/productname', [ProductNameController:: class, 'index']);
-// Route::post('/newproductname', [ProductNameController:: class, 'store']);
-// Route::get('/productname/{name_id}', [ProductNameController:: class, 'show']);
-// Route::put('/updateproductname/{name_id}', [ProductNameController:: class, 'update']);
-// Route::delete('/deleteproductname/{name_id}', [ProductNameController:: class, 'destroy']);
-
-// Route::get('/reservation', [ReservationController:: class, 'index']);
-// Route::post('/newreservation', [ReservationController:: class, 'store']);
-// Route::get('/reservation/{reserve_id}', [ReservationController:: class, 'show']);
-// Route::put('/updatereservation/{reserve_id}', [ReservationController:: class, 'update']);
-// Route::delete('/deletereservation/{reserve_id}', [ReservationController:: class, 'destroy']);
-
-// Route::get('/resttable', [RestaurantTableController:: class, 'index']);
-// Route::post('/newresttable', [RestaurantTableController:: class, 'store']);
-// Route::get('/resttable/{resttable_id}', [RestaurantTableController:: class, 'show']);
-// Route::put('/updateresttable/{resttable_id}', [RestaurantTableController:: class, 'update']);
-// Route::delete('/deleteresttable/{resttable_id}', [RestaurantTableController:: class, 'destroy']);
-
-
-// Route::get('/waiter', [WaiterController:: class, 'index']);
-// Route::post('/newwaiter', [WaiterController:: class, 'store']);
-// Route::get('/waiter/{wait_id}', [WaiterController:: class, 'show']);
-// Route::put('/updatewaiter/{wait_id}', [WaiterController:: class, 'update']);
-// Route::delete('/deletewaiter/{wait_id}', [WaiterController:: class, 'destroy']);
-
+});

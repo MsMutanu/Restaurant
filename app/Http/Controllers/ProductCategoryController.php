@@ -3,86 +3,116 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ProductCategory;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * 
      */
     public function index()
     {
-        $categories = ProductCategory::all();
-        return response()->json($categories, 200);
+        //$response = Http::get('http://localhost:8000/api/productcategory');
+        //$categories = $response->json();
+
+        //return view('productcategory.index', ['categories' => $categories]);
+        echo 'Hello';
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * 
+     */
+    public function create()
+    {
+        return view('productcategy.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     *
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'category' => 'required',
+        $request->validate([
+            'category' => 'required|unique:ProductCategory|max:255',
         ]);
 
-        $category = new ProductCategory;
-        $category->category_id = 'Cat' .Str::random(4); // Generate a random string with 4 characters
-        $category->category = $request->input('category');
-        $category->save();
-        return response()->json($category, 201);
+        $response = Http::post('http://localhost:8000/api/productcategory', [
+            'category' => $request->input('category'),
+        ]);
+        if ($response->successful()) {
+            return redirect()->route('producategort.index')->with('success', 'Product Category added successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to add product Category.');
+        }
+
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  int  $category_id
+     *
      */
-    public function show($id)
+    public function show($category_id)
     {
-        $category = ProductCategory::findOrFail($id);
-        return response()->json($category, 200);
+        $response = Http::get('http://localhost:8000/api/productcategory/' . $category_id);
+        $category = $response->json();
+
+        return view('productcategory.show', ['category' => $category]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $category_id
+     * 
+     */
+    public function edit($category_id)
+    {
+        $response = Http::get('http://localhost:8000/api/productcategory/' . $category_id);
+        $category = $response->json();
+
+        return view('productcategory.edit', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  int  $category_id
+     * 
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $category_id)
     {
-        $validatedData = $request->validate([
-            'category' => 'required',
+        $request->validate([
+            'category' => 'required|unique:ProductCategory|max:255',
         ]);
 
-        $category = ProductCategory::findOrFail($id);
-        $category->update($validatedData);
-        return response()->json([
-        'message' => 'Category updated successfuly',
-        'category' => $category
-        ], 200);
+        $response = Http::put('http://localhost:8000/api/productcategory/' . $category_id, [
+            'category' => $request->input('category'),
+        ]);
+
+        return redirect()->route('productcategory.index')->with('success', 'Category updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  int  $category_id
+     * 
      */
-    public function destroy($id)
+    public function destroy($category_id)
     {
-        $category = ProductCategory::findOrFail($id);
-        $category->delete();
-        return response()->json([
-            'message' => 'Category deleted successfuly'
-        ], 204);
+        $response = Http::delete('http://localhost:8000/api/productcategory/' . $category_id);
+
+        return redirect()->route('productcategories.index')->with('success', 'Category deleted successfully.');
     }
 }

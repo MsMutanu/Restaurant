@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
 class Waiter extends Model
 {
 	protected $table = 'Waiter';
+
+	protected $primaryKey ='wait_id';
 	public $incrementing = false;
 	public $timestamps = false;
 

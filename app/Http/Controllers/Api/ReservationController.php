@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\RestaurantTable;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +36,7 @@ public function store(Request $request)
     // Define the validation rules
     $rules = [
         'cust_id' => 'required|exists:Customer,cust_id',
-        'resttable_no' => 'required|integer',
+        'resttable_no' => 'required|integer|exists:RestaurantTable,resttable_no',
         'no_of_seats' => 'required|integer',
         'date' => 'required|date',
         'time' => 'required',
@@ -62,6 +64,10 @@ public function store(Request $request)
     if (!$existingCustomer) {
         return response()->json(['error' => 'Invalid cust_id'], 400);
     }
+    $validatedData = $request->validate([
+        'resttable_no' => 'required|integer|exists:RestaurantTable,resttable_no',
+    ]);
+    
 
     $reservation->save();
 
@@ -113,6 +119,6 @@ public function store(Request $request)
     {
         $reservation = Reservation::findOrFail($id);
         $reservation->delete();
-        return response()->json(null, 204);
+        return response()->json(['message'=>'Reservation Deleted', 204]);
     }
 }

@@ -2,19 +2,19 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BillController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\InventoryLevelsController;
-use App\Http\Controllers\InventoryOrderHistoryController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\ProductNameController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\RestaurantTableController;
-use App\Http\Controllers\WaiterController;
+use App\Http\Controllers\Api\BillController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\InventoryLevelsController;
+use App\Http\Controllers\Api\InventoryOrderHistoryController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderItemController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\ProductNameController;
+use App\Http\Controllers\Api\ReservationController;
+use App\Http\Controllers\Api\RestaurantTableController;
+use App\Http\Controllers\Api\WaiterController;
 
 /*
 |--------------------------------------------------------------------------
