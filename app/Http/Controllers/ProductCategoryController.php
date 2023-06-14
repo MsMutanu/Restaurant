@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Http;
 
 class ProductCategoryController extends Controller
@@ -14,105 +15,114 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //$response = Http::get('http://localhost:8000/api/productcategory');
-        //$categories = $response->json();
+        // Retrieve all product categories
+        $categories = ProductCategory::all();
 
-        //return view('productcategory.index', ['categories' => $categories]);
-        echo 'Hello';
+        // Check if the request is an API request
+        if (request()->wantsJson()) {
+            return response()->json($categories);
+        }
+
+        // Render the view for web requests
+        return view('admin.productcategory.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * 
-     */
     public function create()
     {
-        return view('productcategy.create');
+        return view('admin.productcategory.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      */
+
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the request data
+        $validatedData = $request->validate([
             'category' => 'required|unique:ProductCategory|max:255',
         ]);
 
-        $response = Http::post('http://localhost:8000/api/productcategory', [
-            'category' => $request->input('category'),
-        ]);
-        if ($response->successful()) {
-            return redirect()->route('producategort.index')->with('success', 'Product Category added successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to add product Category.');
+        // Create a new product category
+        $category = ProductCategory::create($validatedData);
+
+        // Check if the request is an API request
+        if (request()->wantsJson()) {
+            return response()->json($category, 201);
         }
 
-        
+        // Redirect 
+        return redirect()->route('admin.productcategory.index')->with('success', 'Product Category added successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $category_id
-     *
-     */
-    public function show($category_id)
-    {
-        $response = Http::get('http://localhost:8000/api/productcategory/' . $category_id);
-        $category = $response->json();
-
-        return view('productcategory.show', ['category' => $category]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $category_id
-     * 
-     */
     public function edit($category_id)
     {
-        $response = Http::get('http://localhost:8000/api/productcategory/' . $category_id);
-        $category = $response->json();
+        $category = ProductCategory::find($category_id);
+        return view('admin.productcategory.edit', ['category' => $category]);
+    }
 
-        return view('productcategory.edit', ['category' => $category]);
+    public function show($category_id)
+    {
+        $category = ProductCategory::find($category_id);
+        return view('admin.productcategory.show', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $category_id
+     * @param  \App\Models\ProductCategory  $category
      * 
      */
-    public function update(Request $request, $category_id)
+    public function update(Request $request, ProductCategory $category,)
     {
-        $request->validate([
+        // Validate the request data
+        $validatedData = $request->validate([
             'category' => 'required|unique:ProductCategory|max:255',
         ]);
 
-        $response = Http::put('http://localhost:8000/api/productcategory/' . $category_id, [
-            'category' => $request->input('category'),
-        ]);
+        // Update the product category
+        $category->update($validatedData);
 
-        return redirect()->route('productcategory.index')->with('success', 'Category updated successfully.');
+        // Check if the request is an API request
+        if (request()->wantsJson()) {
+            return response()->json($category);
+        }
+
+        // Redirect or return a response for web requests
+        return redirect()->route('admin.productcategory.index')->with('success', 'Product Category updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $category_id
+     * @param  \App\Models\ProductCategory  $category
      * 
      */
+    
     public function destroy($category_id)
-    {
-        $response = Http::delete('http://localhost:8000/api/productcategory/' . $category_id);
+{
+    // Find the ProductCategory instance with the given ID
+    $category = ProductCategory::find($category_id);
 
-        return redirect()->route('productcategories.index')->with('success', 'Category deleted successfully.');
+    if ($category) {
+        // Delete the category
+        $category->delete();
+
+        // Redirect to a specific route or perform any additional logic
+        // after successful deletion
+        return redirect()->route('admin.productcategory.index')
+            ->with('success', 'Category deleted successfully');
+    } else {
+        // Category not found, handle the error accordingly
+        return redirect()->route('admin.productcategory.index')
+            ->with('error', 'Category not found');
     }
+}
+
+    
+    
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ProductNamesController extends Controller
 {
@@ -14,11 +16,13 @@ class ProductNamesController extends Controller
      */
     public function index()
     {
-        $response = Http::timeout(60)->get('http://localhost:8000/api/productname/');
+        $names = ProductName::all();
+        if (request()->wantsJson()) {
+            return response()->json($names);
+        }
+        
 
-        $productNames = $response->json();
-
-        return view('productnames.index', compact('productNames'));
+        return view('admin.productnames.index', ['names' => $names]);
     }
 
     /**
@@ -28,7 +32,7 @@ class ProductNamesController extends Controller
      */
     public function create()
     {
-        return view('productnames.create');
+        return view('/admin/productnames/create');
     }
 
     /**
@@ -39,16 +43,23 @@ class ProductNamesController extends Controller
      */
     public function store(Request $request)
     {
-        $response = Http::post('http://localhost:8000/api/productname', [
-            'product_name' => $request->input('product_name'),
+        $validatedData = $request->validate([
+            'product_name' => 'required|unique:ProductNames|max:255',
         ]);
-
-        if ($response->successful()) {
-            return redirect()->route('productnames.index')->with('success', 'Product name added successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to add product name.');
+        $name = new ProductName;
+        $name->name_id = 'Nam' . Str::random(4);
+        $name->product_name = $request->input('product_name');
+        $name->save();
+        
+            // Check if the request is an API request
+        if ($request->wantsJson()) {
+            return response()->json($name, 201);
         }
-    }
+        
+            return redirect()->route('productnames.index')->with('success', 'Product name created successfully');
+        }
+        
+    
     /**
      * Display the specified resource.
      *
@@ -57,10 +68,8 @@ class ProductNamesController extends Controller
      */
     public function show($name_id)
     {
-        $response = Http::timeout(60)->get('http://localhost:8000/api/productname/' . $name_id);
-        $productName = $response->json();
-
-        return view('productnames.show', ['category' => $productName]);
+        $name = ProductName::findOrFail($name_id);
+        return view('productnames.show', ['name' => $name]);
     }
 
     /**
@@ -71,13 +80,9 @@ class ProductNamesController extends Controller
      */
     public function edit($name_id)
     {
-        $response = Http::get('http://localhost:8000/api/productname' . $name_id);
-
-        $productName = $response->json();
-
-        return view('productnames.edit', compact('productName'));
-    }
-
+        $name = ProductName::findOrFail($name_id);
+    return view('productnames.edit', ['name' => $name]);
+}
     /**
      * Update the specified product name in storage.
      *
@@ -87,15 +92,15 @@ class ProductNamesController extends Controller
      */
     public function update(Request $request, $name_id)
     {
-        $response = Http::put('http://localhost:8000/api/productname' . $name_id, [
-            'product_name' => $request->input('product_name'),
-        ]);
+        $name = ProductName::findOrFail($name_id);
 
-        if ($response->successful()) {
-            return redirect()->route('productnames.index')->with('success', 'Product name updated successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to update product name.');
-        }
+        // Update the product name attributes with the request data
+        $name->name = $request->input('name');
+        
+        // Save the updated product name to the database
+        $name->save();
+    
+        return redirect()->route('productnames.index')->with('success', 'Product name updated successfully.');
     }
 
     /**
@@ -105,14 +110,20 @@ class ProductNamesController extends Controller
      * 
      */
     public function destroy($name_id)
-    {
-        $response = Http::timeout(60)->delete('http://localhost:8000/api/productname' . $name_id);
+{
+    $name = ProductName::find($name_id);
 
-        if ($response->successful()) {
-            return redirect()->route('productnames.index')->with('success', 'Product name deleted successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to delete product name.');
-        }
+    if ($name) {
+        $name->delete();
+        return redirect()->route('productnames.index')->with('success', 'Product Name deleted successfully');
+    } else {
+        return redirect()->route('productnames.index')->with('error', 'Name not found');
     }
 }
+
+
+        
+    }
+    
+
 

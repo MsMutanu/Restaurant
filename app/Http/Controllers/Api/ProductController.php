@@ -34,7 +34,7 @@ public function store(Request $request)
 {
     // Define the validation rules
     $rules = [
-        'product_id' => 'required|string|max:255',
+        
         'name_id' => 'required|exists:ProductNames,name_id',
         'category_id' => 'required|exists:ProductCategory,category_id',
         'product_price' => 'required|numeric',
@@ -51,7 +51,7 @@ public function store(Request $request)
 
     // Validation passed, create the product
     $product = new Product;
-    $product->product_id = $request->input('product_id');
+    $product->product_id =  'Prod' .Str::random(4); 
     $product->name_id = $request->input('name_id');
     $product->category_id = $request->input('category_id');
     $product->product_price = $request->input('product_price');

@@ -35,19 +35,11 @@ Route::get('/', function () {
 
 //Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
 
-Auth::routes();
 
-// Auth protected web routes
-
-Route::group(['middleware' => ['web', 'auth']], function () {
-
-  Route::get('home', 'HomeController@index')->name('home');
-
-});
 
 // Auth protected API routes
 
-Route::middleware('auth:api')->group( function(){
+
 
 Route::get('/admin/productnames', [ProductNamesController::class, 'index'])->name('productnames.index');
 Route::get('/admin/productnames/create', [ProductNamesController::class, 'create'])->name('productnames.create');
@@ -57,19 +49,28 @@ Route::get('/admin/productnames/{name_id}/edit', [ProductNamesController::class,
 Route::put('/admin/productnames/{name_id}', [ProductNamesController::class, 'update'])->name('productnames.update');
 Route::delete('/admin/productnames/{name_id}', [ProductNamesController::class, 'destroy'])->name('productnames.destroy');
 
-Route::get('/admin/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/admin/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/admin/products/{product_id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
+Route::get('/admin/products/{product_id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
 Route::put('/admin/products/{product_id}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/admin/products/{product_id}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('/admin/products/category/{category}', [ProductController::class,'getProductsByCategory'])->name('products.category');
 
-Route::get('/productcategory', [ProductCategoryController::class, 'index'])->name('admin.productcategory.index');
+
+Route::get('/admin/productcategory', [ProductCategoryController::class, 'index'])->name('admin.productcategory.index');
 Route::get('/admin/productcategory/create', [ProductCategoryController::class, 'create'])->name('productcategory.create');
 Route::post('/admin/productcategory', [ProductCategoryController::class, 'store'])->name('admin.productcategory.store');
-Route::get('/admin/productcategory/{category_id}/edit', [ProductCategoryController::class, 'edit'])->name('productcategory.edit');
+Route::get('/admin/productcategory/{category_id}/edit', [ProductCategoryController::class, 'edit'])->name('admin.productcategory.edit');
 Route::put('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'update'])->name('admin.productcategory.update');
 Route::delete('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'destroy'])->name('admin.productcategory.destroy');
 Route::get('/admin/productcategory/{category_id}', [ProductCategoryController::class, 'show'])->name('admin.productcategory.show');
 
-});
+
+
+Route::get('/client/menu', [MenuController::class, 'index'])->name('client.menu.index');
+Route::get('/client/menu/products', [MenuController::class, 'getProductsByCategory'])->name('menu.getProductsByCategory');
+Route::post('/client/menu/cart', [MenuController::class, 'addToCart'])->name('menu.addToCart');
+Route::get('/client/menu/cart', [MenuController::class, 'getCartItems'])->name('menu.getCartItems');
+Route::post('/client/menu/place-order', [MenuController::class, 'placeOrder'])->name('menu.placeOrder');
+
