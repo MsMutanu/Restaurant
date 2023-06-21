@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('order_id')->primary();
             $table->string('cust_id', 50)->index('cust_id');
             $table->integer('resttable_no')->index('resttable_no');
-            $table->integer('waiter_no')->index('waiter_no');
             $table->timestamp('date_time')->nullable()->useCurrent();
             $table->string('status');
             $table->integer('order_amount');

@@ -1,45 +1,27 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Enums\TableLocation;
+use App\Enums\TableStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
-/**
- * Class RestaurantTable
- * 
- * @property string $resttable_id
- * @property int $resttable_no
- * @property bool $availability
- * @property int $capacity
- * 
- * @property Collection|Bill[] $bills
- * @property Collection|Order[] $orders
- * @property Collection|Reservation[] $reservations
- *
- * @package App\Models
- */
+
 class RestaurantTable extends Model
 {
+    use HasFactory;
+
 	protected $table = 'RestaurantTable';
+    protected $fillable = ['name', 'guest_number', 'status', 'location'];
 
-	protected $primaryKey = 'resttable_id';
-	public $incrementing = false;
-	public $timestamps = false;
+    protected $casts = [
+        'status' => TableStatus::class,
+        'location' => TableLocation::class
+    ];
 
-	protected $casts = [
-		'resttable_no' => 'int',
-		'capacity' => 'int'
-	];
 
-	protected $fillable = [
-		'availability',
-		'capacity'
-	];
 
 	public function bills()
 	{
@@ -53,6 +35,6 @@ class RestaurantTable extends Model
 
 	public function reservations()
 	{
-		return $this->hasMany(Reservation::class, 'resttable_no', 'resttable_no');
+		return $this->hasMany(Reservation::class);
 	}
 }

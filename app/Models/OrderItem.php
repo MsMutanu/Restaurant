@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $orderitems_id
  * @property string $order_id
  * @property string $product_id
+ * @property int $quantity
  * 
  * @property Product $product
  * @property Order $order
@@ -29,7 +30,8 @@ class OrderItem extends Model
 
 	protected $fillable = [
 		'order_id',
-		'product_id'
+		'product_id',
+		'quantity'
 	];
 
 	public function product()

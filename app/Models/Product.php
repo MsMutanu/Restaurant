@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $category_id
  * @property float $product_price
  * @property string $product_details
+ * @property int $image
  * 
  * @property ProductName $product_name
  * @property ProductCategory $product_category
@@ -42,7 +43,9 @@ class Product extends Model
 		'name_id',
 		'category_id',
 		'product_price',
-		'product_details'
+		'product_details',
+		'image'
+
 	];
 
 	public function product_name()

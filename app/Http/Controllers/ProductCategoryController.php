@@ -65,10 +65,11 @@ class ProductCategoryController extends Controller
     }
 
     public function show($category_id)
-    {
-        $category = ProductCategory::find($category_id);
-        return view('admin.productcategory.show', ['category' => $category]);
-    }
+{
+    $category = ProductCategory::find($category_id);
+    return view('admin.productcategory.show', compact('category'));
+}
+
 
     /**
      * Update the specified resource in storage.

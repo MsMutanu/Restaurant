@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Reservation', function (Blueprint $table) {
-            $table->string('reserve_id')->primary();
-            $table->string('cust_id', 50)->index('cust_id');
-            $table->integer('resttable_no')->index('resttable_no');
-            $table->integer('no_of_seats');
-            $table->date('date');
-            $table->time('time');
-
-            $table->index(['reserve_id'], 'reserve_id');
+        Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email');
+            $table->string('tel_number');
+            $table->dateTime('res_date'); // Resolution date
+            $table->unsignedBigInteger('table_id');
+            $table->integer('guest_number');
+            $table->timestamps();
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Reservation');
+        Schema::dropIfExists('reservations');
     }
 };

@@ -1,35 +1,25 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Menu
- * 
- * @property string $menu_id
- * @property string $product_id
- * @property string $product_details
- * 
- * @property Product $product
- *
- * @package App\Models
- */
 class Menu extends Model
 {
-	protected $table = 'Menu';
-	protected $primaryKey = 'menu_id';
-	public $incrementing = false;
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $fillable = [
-		'product_id',
-		'product_details'
-	];
+    protected $table='menus';
+
+    protected $fillable = [
+      'name', 'image', 'description', 'price'
+    ];
+
+    public function categories(){
+      return $this->belongsToMany(Category::class, 'category_menu');
+    }
+
+
 
 	public function product()
 	{

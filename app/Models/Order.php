@@ -39,7 +39,7 @@ class Order extends Model
 
 	protected $casts = [
 		'resttable_no' => 'int',
-		'waiter_no' => 'int',
+		
 		'date_time' => 'datetime',
 		'order_amount' => 'int'
 	];

@@ -30,49 +30,57 @@ class ProductController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     
-public function store(Request $request)
-{
-    // Define the validation rules
-    $rules = [
-        
-        'name_id' => 'required|exists:ProductNames,name_id',
-        'category_id' => 'required|exists:ProductCategory,category_id',
-        'product_price' => 'required|numeric',
-        'product_details' => 'required|string',
-    ];
-
-    // Validate the request data
-    $validator = Validator::make($request->all(), $rules);
-
-    // Check if validation fails
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 400);
-    }
-
-    // Validation passed, create the product
-    $product = new Product;
-    $product->product_id =  'Prod' .Str::random(4); 
-    $product->name_id = $request->input('name_id');
-    $product->category_id = $request->input('category_id');
-    $product->product_price = $request->input('product_price');
-    $product->product_details = $request->input('product_details');
-
-    // Check if the name_id corresponds to an existing name
-    $existingName = ProductName::find($product->name_id);
-    if (!$existingName) {
-        return response()->json(['error' => 'Invalid name_id'], 400);
-    }
-
-    // Check if the category_id corresponds to an existing category
-    $existingCategory = ProductCategory::find($product->category_id);
-    if (!$existingCategory) {
-        return response()->json(['error' => 'Invalid category_id'], 400);
-    }
-
-    $product->save();
-
-    return response()->json($product, 201);
-}
+     public function store(Request $request)
+     {
+         // Define the validation rules
+         $rules = [
+             'name_id' => 'required|exists:ProductNames,name_id',
+             'category_id' => 'required|exists:ProductCategory,category_id',
+             'product_price' => 'required|numeric',
+             'product_details' => 'required|string',
+             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+         ];
+     
+         // Validate the request data
+         $validator = Validator::make($request->all(), $rules);
+     
+         // Check if validation fails
+         if ($validator->fails()) {
+             return response()->json(['errors' => $validator->errors()], 400);
+         }
+     
+         // Validation passed, create the product
+         $product = new Product;
+         $product->product_id = 'Prod' . Str::random(4); 
+         $product->name_id = $request->input('name_id');
+         $product->category_id = $request->input('category_id');
+         $product->product_price = $request->input('product_price');
+         $product->product_details = $request->input('product_details');
+     
+         // Check if the name_id corresponds to an existing name
+         $existingName = ProductName::find($product->name_id);
+         if (!$existingName) {
+             return response()->json(['error' => 'Invalid name_id'], 400);
+         }
+     
+         // Check if the category_id corresponds to an existing category
+         $existingCategory = ProductCategory::find($product->category_id);
+         if (!$existingCategory) {
+             return response()->json(['error' => 'Invalid category_id'], 400);
+         }
+     
+         // Process the uploaded image
+         if ($request->hasFile('image')) {
+             $image = $request->file('image');
+             $imagePath = $image->store('product_images', 'public');
+             $product->image = $imagePath;
+         }
+     
+         $product->save();
+     
+         return response()->json($product, 201);
+     }
+     
 
 
     /**

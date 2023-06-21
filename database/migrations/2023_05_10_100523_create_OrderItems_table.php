@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('product_id', 50)->index('product_id');
 
             $table->index(['orderitems_id'], 'orderitems_id');
+            
+            $table->integer('quantity');
         });
     }
 

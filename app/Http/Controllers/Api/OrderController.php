@@ -38,7 +38,6 @@ class OrderController extends Controller
          $rules = [
              'cust_id' => 'required|exists:Customer,cust_id',
              'resttable_no' => 'required',
-             'waiter_no' => 'required',
              'status' => 'required',
              'order_amount' => 'required|numeric',
          ];
@@ -56,7 +55,6 @@ class OrderController extends Controller
          $order->order_id = 'Ord' . Str::random(4); // Generate a random string with 4 characters
          $order->cust_id = $request->input('cust_id');
          $order->resttable_no = $request->input('resttable_no');
-         $order->waiter_no = $request->input('waiter_no');
          $order->status = $request->input('status');
          $order->order_amount = $request->input('order_amount');
      
@@ -97,7 +95,6 @@ class OrderController extends Controller
         $validatedData = $request->validate([
             'cust_id' => 'required',
             'resttable_no' => 'required|integer',
-            'waiter_no' => 'required|integer',
             'date_time' => 'required|date',
             'status' => 'required',
             'order_amount' => 'required|numeric',

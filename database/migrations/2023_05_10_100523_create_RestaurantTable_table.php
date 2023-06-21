@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('RestaurantTable', function (Blueprint $table) {
-            $table->string('resttable_id')->index('resttable_id');
-            $table->integer('resttable_no')->index('resttable_no');
-            $table->string('availability');
-            $table->integer('capacity');
-
-            $table->primary(['resttable_id', 'resttable_no']);
+            $table->id();
+            $table->string('name');
+            $table->integer('guest_number');
+            $table->string('status')->default('available');
+            $table->string('location');
+            $table->timestamps();
         });
     }
 
