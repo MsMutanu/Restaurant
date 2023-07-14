@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\TableStatus;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ReservationStoreRequest;
-use App\Models\Reservation;
-use App\Models\RestaurantTable;
-use Carbon\Carbon;
+use App\Models\reservation;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Notifications\ReservationCancel;
+use App\Notifications\ReservationConfirmed;
+use Illuminate\Support\Facades\Notification;
 
 class ReservationController extends Controller
 {
@@ -20,7 +20,7 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::all();
-        return view('admin.reservations.index', compact('reservations'));
+         return view('admin.reservation.index', compact('reservations'));
     }
 
     /**
@@ -30,8 +30,7 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        $tables = RestaurantTable::where('status', TableStatus::Available)->get();
-        return view('admin.reservations.create', compact('tables'));
+        //
     }
 
     /**
@@ -40,21 +39,9 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ReservationStoreRequest $request)
+    public function store(Request $request)
     {
-        $table = RestaurantTable::findOrFail($request->table_id);
-        if ($request->guest_number > $table->guest_number) {
-            return back()->with('warning', 'Please choose the table base on guests.');
-        }
-        $request_date = Carbon::parse($request->res_date);
-        foreach ($table->reservations as $res) {
-            if ($res->res_date->format('Y-m-d') == $request_date->format('Y-m-d')) {
-                return back()->with('warning', 'This table is reserved for this date.');
-            }
-        }
-        Reservation::create($request->validated());
-
-        return to_route('admin.reservations.index')->with('success', 'Reservation created successfully.');
+        //
     }
 
     /**
@@ -74,10 +61,9 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Reservation $reservation)
+    public function edit($id)
     {
-        $tables = RestaurantTable::where('status', TableStatus::Available)->get();
-        return view('admin.reservations.edit', compact('reservation', 'tables'));
+        //
     }
 
     /**
@@ -87,23 +73,16 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ReservationStoreRequest $request, Reservation $reservation)
+    public function update(Request $request, $id)
     {
-        $table = RestaurantTable::findOrFail($request->table_id);
-        if ($request->guest_number > $table->guest_number) {
-            return back()->with('warning', 'Please choose the table base on guests.');
-        }
-        $request_date = Carbon::parse($request->res_date);
-        $reservations = $table->reservations()->where('id', '!=', $reservation->id)->get();
-        // dd($reservation->table_id);
-        foreach ($reservations as $res) {
-            if ($res->res_date->format('Y-m-d') == $request_date->format('Y-m-d')) {
-                return back()->with('warning', 'This table is reserved for this date.');
-            }
-        }
-
-        $reservation->update($request->validated());
-        return to_route('admin.reservations.index')->with('success', 'Reservation updated successfully.');
+        $reservation = Reservation::find($id);
+        $reservation->delivered =  $request->delivered;
+        $reservation->save();
+        Notification::route('mail', $reservation->email)->notify(new ReservationConfirmed);
+        Notification::route('mail', $reservation->email)->notify(new ReservationCancel);
+        Toastr::success('Researvation Submit Successfully', 'success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
+         
     }
 
     /**
@@ -112,10 +91,12 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reservation $reservation)
+    public function destroy($id)
     {
-        $reservation->delete();
-
-        return to_route('admin.reservations.index')->with('danger', 'Reservation deleted successfully.');
+        $reservations = Reservation::find($id);
+        $reservations->delete();
+        return redirect()->route('reservation.index');
     }
 }
+
+ 

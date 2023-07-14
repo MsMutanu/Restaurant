@@ -19,11 +19,13 @@ class Admin extends Seeder
     {
       User::create([
         'name' => 'Admin',
-        'email' => 'faithmutanumutie@gmail.com',
+        'email' => 'faithtanuh@gmail.com',
         'email_verified_at' => now(),
         'password' => Hash::make('Tanu1234'), // password
         'remember_token' => Str::random(10),
         'is_admin' => 1
+
+      
       ]); 
     }
 }

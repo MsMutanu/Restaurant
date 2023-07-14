@@ -1,45 +1,74 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\ReservationController;
-use App\Http\Controllers\Admin\TableController;
-use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
-use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
-use App\Http\Controllers\Frontend\ReservationController as FrontendReservationController;
-use App\Http\Controllers\Frontend\WelcomeController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route; 
 
-
-Route::get('/', [WelcomeController::class, 'index']);
-Route::get('/categories', [FrontendCategoryController::class, 'index'])->name('categories.index');
-Route::get('/categories/{category}', [FrontendCategoryController::class, 'show'])->name('categories.show');
-Route::get('/menus', [FrontendMenuController::class, 'index'])->name('menus.index');
-Route::get('/reservation/step-one', [FrontendReservationController::class, 'stepOne'])->name('reservations.step.one');
-Route::post('/reservation/step-one', [FrontendReservationController::class, 'storeStepOne'])->name('reservations.store.step.one');
-Route::get('/reservation/step-two', [FrontendReservationController::class, 'stepTwo'])->name('reservations.step.two');
-Route::post('/reservation/step-two', [FrontendReservationController::class, 'storeStepTwo'])->name('reservations.store.step.two');
-Route::get('/thankyou', [WelcomeController::class, 'thankyou'])->name('thankyou');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/', function () {
+    return view('fontend.index');
 });
 
-Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('index');
-    Route::resource('/categories', CategoryController::class);
-    Route::resource('/menus', MenuController::class);
-    Route::resource('/tables', TableController::class);
-    Route::resource('/reservations', ReservationController::class);
+Auth::routes(['verify'=>true]);
+
+// fontend all pages route
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('fontend.index');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('fontend.index');
+Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact'])->name('fontend.contact');
+Route::get('/reservation', [App\Http\Controllers\HomeController::class, 'reservation'])->name('fontend.reservation');
+Route::get('/about', [App\Http\Controllers\HomeController::class, 'about'])->name('fontend.about');
+Route::get('/cart', [App\Http\Controllers\User\UserController::class, 'cart'])->name('fontend.cart');
+Route::get('/menu', [App\Http\Controllers\HomeController::class, 'menu'])->name('fontend.menu');
+Route::get('/shop', [App\Http\Controllers\HomeController::class, 'shop'])->name('fontend.shop');
+Route::get('/checkout', [App\Http\Controllers\User\UserController::class, 'checkout'])->name('fontend.checkout');
+Route::get('/productsingle', [App\Http\Controllers\HomeController::class, 'productsingle'])->name('fontend.productsingle'); 
+Route::get('/staying', [App\Http\Controllers\User\UserController::class, 'staying'])->name('fontend.staying');
+ 
+//user product view 
+Route::get('/viewproduct/{id}', [App\Http\Controllers\ViewproductController::class, 'viewproduct'])->name('fontend.viewproduct');
+ 
+Route::group(['prefix'=>'user', 'middleware'=>'user','verified'], function(){
+    //user profile
+    Route::get('/profile', [App\Http\Controllers\User\UserController::class, 'profile'])->name('fontend.profile');
+     
+    //user view order 
+    Route::get('/myorder', [App\Http\Controllers\User\OrderController::class, 'myorder'])->name('fontend.myorder');
+    
+    //user view order 
+    Route::get('/cart', [App\Http\Controllers\User\CartController::class, 'carts'])->name('fontend.cart');
+    
+    //user Sent product Order
+    Route::post('order', [App\Http\Controllers\Admin\UserOrderController::class, 'store'])->name('order.store');
+
+  });
+ 
+//route group
+Route::group(['namespace'=> 'App\Http\Controllers\User', 'middleware'=>'user','verified'], function(){
+
+    Route::get('/addcart', 'CartController@index')->name('fontend.cart');
+    Route::resource('carts', CartController::class);
+
 });
 
 
+//user login
+Route::get('/user-login', [App\Http\Controllers\Auth\LoginController::class, 'userLogin'])->name('user.login'); 
+//user login
+Route::post('/users-login', [App\Http\Controllers\Auth\LoginController::class, 'usersLogin'])->name('userslogin');
+//user invalid click return logout
+Route::get('/invalid_click', [App\Http\Controllers\Auth\LoginController::class, 'invalid'])->name('invalid');
+ 
+//admin login
+Route::get('/admin-login',[App\Http\Controllers\Auth\LoginController::class, 'adminLogin']) ->name('admin.login');
 
-require __DIR__ . '/auth.php';
+
+  
+// reservation table route
+Route::post('/reservation', [App\Http\Controllers\User\ReservationController::class, 'sentReservation'])->name('sentReservation');
+ 
+// contact form route by email system
+Route::post('/contuct', [App\Http\Controllers\ContactController::class, 'contuct'])->name('contuct');
+Route::post('/sendEmail', [App\Http\Controllers\ContactController::class, 'sendEmail'])->name('sendEmail');
+ 
+
+
+ 
+
