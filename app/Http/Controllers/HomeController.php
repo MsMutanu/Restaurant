@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Item; 
+use App\Models\RestaurantTables;
 use App\Models\Slider;
 use App\Models\Category;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -14,13 +15,14 @@ class HomeController extends Controller
  
     public function index()
     {
-        $sliders = Slider::all();
+        
         $categorys = Category::all();
         $items = Item::all();
+        $tables = RestaurantTables::all();
 
         //$item = Item::where('category_id', Category::category()->id)->get();
         
-         return view('fontend.index', compact('sliders', 'categorys','items'));
+         return view('fontend.index', compact('tables', 'categorys','items'));
     }
     public function contact()
     {
@@ -28,7 +30,8 @@ class HomeController extends Controller
     }
     public function reservation()
     {
-        return view('fontend.reservation');
+     $tables= RestaurantTables::all();
+        return view('fontend.reservation', compact('tables'));
     }
     public function about()
     {

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
 use App\Models\Item;
+use App\Models\RestaurantTables;
 use App\Models\Usercart;
+use App\Models\Userorder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {
@@ -96,7 +100,9 @@ class CartController extends Controller
     {
         $carts= Cart::where('user_id', Auth()->user()->id)->get();
         $cart = Cart::find($id);
-        return view('fontend.checkout', compact('cart','carts'));
+        $restauranttables = RestaurantTables::all();
+
+        return view('fontend.checkout', compact('cart','carts','restauranttables'));
     }
 
     /**
@@ -108,13 +114,14 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $restauranttables= RestaurantTables::all();
         $carts= Cart::where('user_id', Auth()->user()->id)->get();
         $cart = Cart::find($id);  
         $cart->quantity = $request->quantity; 
         $cart->price = $request->price * $request->quantity; 
         $cart->status = false;
         $cart->update();
-        return view('fontend.checkout', compact('cart','carts'));
+        return view('fontend.checkout', compact('cart','carts', 'restauranttables'));
     }
 
     /**
@@ -129,4 +136,14 @@ class CartController extends Controller
         $carts->delete();
        return redirect()->route('fontend.cart', compact('carts'));
     }
+    
+
+
+
+
 }
+
+
+
+    
+

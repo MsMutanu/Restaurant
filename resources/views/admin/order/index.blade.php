@@ -47,7 +47,8 @@
                         <th>sub total</th>
                         <th>discount</th>
                         <th>tax</th>
-                        <th>total</th> 
+                        <th>total</th>
+                        <th>Table ID</th> 
                         <th>first name</th>
                         <th>last name</th>
                         <th>Mobile</th>
@@ -72,6 +73,7 @@
                         <td>Ksh {{$order->discount}}</td>
                         <td>Ksh {{$order->tax}}</td>
                         <td>Ksh {{$order->total}}</td>
+                        <td>{{$order->table_id}}</td>
                         <td>{{$order->firstname}}</td>
                         <td>{{$order->lastname}}</td>
                         <td>{{$order->phone}}</td>

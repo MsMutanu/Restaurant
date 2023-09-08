@@ -19,73 +19,7 @@
 	</div>
   </section>
  
-    <section class="home-slider owl-carousel">
-	 @foreach($sliders as $slider)
-      <div class="slider-item" style="background: url('{{asset('uploads/slider/'.$slider->image)}}');background-size: cover; background-repeat :no-repeat">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
-
-            <div class="col-md-8 col-sm-12 text-center ftco-animate">
-            	<span class="subheading">Welcome</span>
-              <h1 class="mb-4">{{$slider->title}}</h1>
-              <p class="mb-4 mb-md-5">{{$slider->sub_title}}</p>
-              <p><a href="{{route('fontend.shop')}}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="{{route('fontend.menu')}}" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-	   @endforeach
-  
-    </section>
-
-    <section class="ftco-intro">
-    	<div class="container-wrap">
-	    		<div class="book p-4">
-	    			<h3>Book a Table</h3>
-	    			<form  class="appointment-form" method="POST" action="{{route('sentReservation')}}">
-                                @csrf
-                            
-
-					<div class="d-md-flex">
-		    				<div class="form-group">
-		    					<input type="text" name="name" class="form-control" placeholder="Name">
-		    				</div>
-		    				<div class="form-group ml-md-4">
-		    					<input type="email"  name="email" class="form-control" placeholder="Last Name">
-		    				</div>
-	    				</div>
-	    				<div class="d-md-flex">
-		    				<div class="form-group">
-		    					<div class="input-wrap">
-		            		<div class="icon"><span class="ion-md-calendar"></span></div>
-		            		<input type="date" name="date"  placeholder="Date">
-	            		</div>
-		    				</div>
-		    				<div class="form-group ml-md-4">
-		    					<div class="input-wrap">
-		            		<div class="icon"><span class="ion-ios-clock"></span></div>
-		            		<input type="time" name="time"  placeholder="Time" max="23:59">
-	            		</div>
-		    				</div>
-		    				<div class="form-group ml-md-4">
-		    					<input type="text" name="phone" class="form-control" placeholder="Phone">
-		    				</div>
-	    				</div>
-	    				<div class="d-md-flex">
-	    					<div class="form-group">
-		              <textarea name="description" id="" cols="30" rows="2" class="form-control" placeholder="Message"></textarea>
-		            </div>
-		            <div class="form-group ml-md-4">
-		              <input type="submit" value="Appointment" class="btn btn-white py-3 px-4">
-		            </div>
-	    				</div>
-	    			</form>
-	    		</div>
-    		</div>
-    	</div>
-    </section>
+    
 
     <section class="ftco-about d-md-flex">
     	<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
@@ -212,6 +146,19 @@
 		    					<input type="text" name="phone" class="form-control" placeholder="Phone">
 		    				</div>
 	    				</div>
+						<div class="d-md-flex">
+							<div class="form-group">
+								<label for="table_id" class="block text-sm font-medium text-gray-700">Choose a Table</label>
+								<select name="table_id" id="table_id" class="form-control" style="background-color: black; ">
+									@foreach($tables as $table)
+									<option value="{{ $table->id }}">{{ $table->name }}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="form-group ml-md-4">
+								<textarea name="description" cols="30" rows="2" class="form-control" placeholder="Message"></textarea>
+							</div>
+						</div>
 	    				<div class="d-md-flex">
 	    					<div class="form-group">
 		              <textarea name="description" id="" cols="30" rows="2" class="form-control" placeholder="Message"></textarea>

@@ -32,8 +32,10 @@ class CreateUserordersTable extends Migration
             $table->string('line1');
             $table->string('line2')->nullable();
             $table->string('payment_method');
+            $table->unsignedBigInteger('table_id');
             $table->boolean('status');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreign('table_id')->references('id')->on('restauranttables')->onDelete('cascade');
             $table->timestamps();
         });
     }

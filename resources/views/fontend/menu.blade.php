@@ -36,7 +36,7 @@
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
 	        				<h3><span>{{ $item->item_name}}</span></h3>
-	        				<span class="price">{{ $item->price}}</span>
+	        				<span class="price">Ksh{{ $item->price}}</span>
 	        			</div>
 	        			<div class="d-block">
 	        				<p>{{ $item->description}}</p>
@@ -98,7 +98,7 @@
 		              				<div class="text">
 		              					<h3><a href="{{route('fontend.viewproduct',$item->id)}}">{{ $item->item_name}}</a></h3>
 		              					<p class="descriptions">{{ $item->description}}</p>
-		              					<p class="price"><span>$ {{ $item->price}}</span></p>
+		              					<p class="price"><span>Ksh {{ $item->price}}</span></p>
 		              					
 					<form action="{{route('carts.store')}}" method="POST"  enctype="multipart/form-data">
                        @csrf

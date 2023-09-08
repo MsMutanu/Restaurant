@@ -26,7 +26,8 @@
                         <th> time</th> 
                         <th> date</th> 
                         <th> description</th>
-                        <th>Status</th> 
+                        <th>Status</th>
+                        <th> Table ID</th>
                        <th> Action </th>
                       </thead>
                       <tbody>
@@ -55,6 +56,7 @@
 
                           
                         </td>
+                        <td>{{$reservation->table_id}}</td>
                             
 
                            

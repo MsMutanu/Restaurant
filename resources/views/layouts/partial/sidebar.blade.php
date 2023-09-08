@@ -25,8 +25,6 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
           
             <li class="nav-item">
                 <a href="{{route('admin.dashboard')}}" class="nav-link {{Request::is('admin/dashboard*') ? 'active' : '' }}">
@@ -58,6 +56,12 @@
                 <p> Item </p>
                 </a>
             </li>
+            <li class="nav-item">
+              <a href="{{route('restauranttables.index')}}" class="nav-link {{Request::is('admin/restauranttables*') ? 'active' : '' }}">
+               <i class="far fa-circle nav-icon"></i>
+              <p> Restaurant Tables </p>
+              </a>
+          </li>
   
             
 
@@ -67,6 +71,12 @@
                 <p> Order List</p>
                 </a>
             </li>
+            <li class="nav-item">
+              <a href="{{route('users.index')}}" class="nav-link {{Request::is('admin/users*') ? 'active' : '' }}">
+               <i class="far fa-circle nav-icon"></i>
+              <p> Manage Users </p>
+              </a>
+          </li>
    
           <li class="nav-item d-none">
             <a href="#" class="nav-link">
@@ -134,7 +144,7 @@
  
                  
 
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                      @if (Route::has('password.request'))
                       <a class="nav-link" href="{{ route('password.request') }}">
                         <i class="far fa-circle nav-icon"></i>
@@ -142,7 +152,7 @@
                          </a>
                       @endif
                     </a>
-                  </li>
+                  </li> --}}
   
                   
            <li class="nav-item">

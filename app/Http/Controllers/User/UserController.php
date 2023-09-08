@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Slider;
+
+use App\Models\RestaurantTables;
+
 use App\Models\Cart;
 use App\Models\Item; 
 use App\Models\Category;
@@ -45,12 +47,13 @@ class UserController extends Controller
 
     public function checkout()
     {
-        $sliders = Slider::all();
+        
         $categorys = Category::all();
         $items = Item::all();
-        return view('fontend.checkout', compact('sliders', 'categorys','items'));
-       
-    }
+        $restauranttables = RestaurantTables::all();
+
+    return view('fontend.checkout', compact('categorys', 'items', 'restauranttables'));
+}
      
     public function staying()
     {         

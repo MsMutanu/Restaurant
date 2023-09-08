@@ -1,5 +1,5 @@
 @extends('layouts-frontend.app')
-@section('title', 'card | Cofee')
+@section('title', 'card | Order')
 @section('content')
  
 
@@ -14,6 +14,7 @@
 
 				</div>
 				</div>
+				
 			<div class="container">
 				<div class="row">
     			<div class="col-md-12 ftco-animate">

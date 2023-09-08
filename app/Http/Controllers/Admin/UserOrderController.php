@@ -58,6 +58,7 @@ class UserOrderController extends Controller
         $item->tax= $request->tax;
         $item->total= $request->total;
         $item->payment_method= $request->optradio;
+        $item->table_id=$request->table_id;
         $item->status = false;
           
         $item->save();
@@ -76,7 +77,7 @@ class UserOrderController extends Controller
          $order->status = $request->status;
           
          $order->save();
-         Notification::route('mail', $order->email)->notify(new OrderConfirmed);
+         
          Toastr::success('order confirmed Successfully', 'success', ["positionClass" => "toast-top-right"]);
          return redirect()->back();
     }
@@ -92,7 +93,7 @@ class UserOrderController extends Controller
          $order->status = $request->status;
           
          $order->save();
-         Notification::route('mail', $order->email)->notify(new OrderConfirmed);
+         
          Toastr::success('order cancel Successfull.', 'success', ["positionClass" => "toast-top-right"]);
          return redirect()->back();
     }

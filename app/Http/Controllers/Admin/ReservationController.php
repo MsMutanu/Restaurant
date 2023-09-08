@@ -74,16 +74,16 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $reservation = Reservation::find($id);
-        $reservation->delivered =  $request->delivered;
-        $reservation->save();
-        Notification::route('mail', $reservation->email)->notify(new ReservationConfirmed);
-        Notification::route('mail', $reservation->email)->notify(new ReservationCancel);
-        Toastr::success('Researvation Submit Successfully', 'success', ["positionClass" => "toast-top-right"]);
-        return redirect()->back();
-         
-    }
+{
+    $reservation = Reservation::find($id);
+    $reservation->delivered = $request->delivered;
+    $reservation->save();
+    
+    Toastr::success('Reservation Updated Successfully', 'success', ["positionClass" => "toast-top-right"]);
+    
+    return redirect()->back();
+}
+
 
     /**
      * Remove the specified resource from storage.

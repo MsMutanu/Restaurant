@@ -10,7 +10,7 @@
       <div class="container">
 		  <div class="row slider-text justify-content-start align-items-start">
             <div class="col-md-7 col-sm-12 ftco-animate">
-            	  <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> / <span>stay</span></p>
+            	  <p class="breadcrumbs"><span class="mr-2"><a href="{{route('fontend.index')}}">Home</a></span> / <span>stay</span></p>
             </div>
           </div>
         <div class="row justify-content-center align-items-center mt-2">

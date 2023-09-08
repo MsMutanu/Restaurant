@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route; 
 
+
 Route::get('/', function () {
     return view('fontend.index');
 });
@@ -45,6 +46,8 @@ Route::group(['namespace'=> 'App\Http\Controllers\User', 'middleware'=>'user','v
 
     Route::get('/addcart', 'CartController@index')->name('fontend.cart');
     Route::resource('carts', CartController::class);
+    
+
 
 });
 
@@ -67,8 +70,5 @@ Route::post('/reservation', [App\Http\Controllers\User\ReservationController::cl
 // contact form route by email system
 Route::post('/contuct', [App\Http\Controllers\ContactController::class, 'contuct'])->name('contuct');
 Route::post('/sendEmail', [App\Http\Controllers\ContactController::class, 'sendEmail'])->name('sendEmail');
- 
-
-
  
 

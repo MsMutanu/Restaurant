@@ -10,7 +10,7 @@
       <div class="container">
 		  <div class="row slider-text justify-content-start align-items-start">
             <div class="col-md-7 col-sm-12 ftco-animate">
-            	  <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> / <span>Checout</span></p>
+            	  <p class="breadcrumbs"><span class="mr-2"><a href="{{route('fontend.index')}}">Home</a></span> / <span>Checkout</span></p>
             </div>
           </div>
         <div class="row">
@@ -48,6 +48,16 @@
 	                  <input type="text" name="lastname" class="form-control" placeholder="">
 	                </div>
                 </div>
+				<div class="form-group">
+					<label for="table_id">Choose a Table</label>
+					<select name="table_id" id="table_id" class="form-control" style="background-color:black; color: white;">
+						@foreach($restauranttables as $table)
+							<option value="{{ $table->id }}">{{ $table->table_name }}</option>
+						@endforeach
+					</select>
+				</div>
+				
+				
                 <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">

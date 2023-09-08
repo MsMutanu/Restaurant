@@ -19,14 +19,15 @@ class DashboardController extends Controller
     public function index()
     {
         $user = User::count();
-        $sliders = Slider::all();
-        $countSlider = slider::count();
         $item = Item::count(); 
         $reservation = reservation::count();
         $userOrder = Userorder::count();
         $reservationpending = Reservation::where('delivered', false)->count();
         $reservationconfirmed = Reservation::where('delivered', true)->count();
-        return view('admin.dashboard', compact('sliders', 'countSlider', 'user','item',  'reservation', 'reservationpending', 'reservationconfirmed','userOrder'));
+        $pendingOrderCount = Userorder::where('status', false)->count();
+        $confirmedOrderCount=Userorder::where('status', true)->count();
+
+        return view('admin.dashboard', compact( 'user','item',  'reservation', 'reservationpending', 'reservationconfirmed','userOrder', 'pendingOrderCount','confirmedOrderCount'));
 
     }
 }
