@@ -11,22 +11,22 @@
 
 		  <div class="col-md-7 col-sm-12 text-center ftco-animate">
 			  <h1 class="mb-3 mt-5 bread">Welcome To Our Restaurant</h1>
-			  
+
 		  </div>
 
 		</div>
 	  </div>
 	</div>
   </section>
- 
-    
+
+
 
     <section class="ftco-about d-md-flex">
     	<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
     	<div class="one-half ftco-animate">
     		<div class="overlap">
 	        <div class="heading-section ftco-animate ">
-	        	
+
 	          <h2 class="mb-4">Our Story</h2>
 	        </div>
 	        <div>
@@ -35,22 +35,23 @@
   			</div>
     	</div>
     </section>
- 
- 
- 
-    
 
-	 
+
+
+
+
+
 
     <section class="ftco-menu mb-5 pb-5">
     	<div class="container">
     		<div class="row justify-content-center mb-5">
           <div class="col-md-7 heading-section text-center ftco-animate">
-          	
+
             <h2 class="mb-4">Our Products</h2>
-            
+
           </div>
         </div>
+
     		<div class="row d-md-flex">
 	    		<div class="col-lg-12 ftco-animate p-md-5">
 		    		<div class="row">
@@ -64,7 +65,7 @@
 				  </div>
 
 		        <div class="col-md-12 d-flex align-items-center">
-		            
+
 				  <div class="tab-content ftco-animate" id="v-pills-tabContent">
 					@foreach($categorys as $key=>$category)
 		              <div class="tab-pane fade show {{$key==0 ? 'active' : ''}}" id="{{$category->id}}" role="tabpanel" aria-labelledby="v-pills-{{$category->id}}-tab">
@@ -75,7 +76,7 @@
 						@endphp
 
 						@foreach($products as $item)
-						<a href="{{route('fontend.viewproduct',$item->id)}}">
+						<a href="{{route('cart.add',$item->id)}}">
 		              		<div class="col-md-4 text-center" style="min-width:300px; max-width: 350px;">
 		              			<div class="menu-wrap">
 		              				<a href="#" class="menu-img img mb-4" style="background-image: url('{{asset('uploads/item/'.$item->image)}}');"></a>
@@ -88,36 +89,36 @@
 		              			</div>
 		              		</div>
 						</a>
-					    @endforeach  
+					    @endforeach
 
 
 		              	</div>
 		              </div>
 					  @endforeach
- 
+
                     </div>
-					
+
 		          </div>
 		        </div>
 		      </div>
 		    </div>
     	</div>
     </section>
- 
-   
 
-	 
-		
+
+
+
+
 		<section class="ftco-appointment">
 			<div class="overlay"></div>
     	<div class="container-wrap">
     		<div class="row no-gutters d-md-flex align-items-center">
-    			
+
 	    		<div class="col-md-6 appointment ftco-animate">
 	    			<h3 class="mb-3">Book a Table</h3>
 	    				    			<form  class="appointment-form" method="POST" action="{{route('sentReservation')}}">
                                 @csrf
-                            
+
 
 					<div class="d-md-flex">
 		    				<div class="form-group">
@@ -165,10 +166,10 @@
 		            </div>
                     <div class="form-group ml-md-4">
 		              <input type="submit" value="Appointment" class="btn btn-primary py-3 px-4">
-		            </div>  
+		            </div>
 	    				</div>
 	    			</form>
-	    		</div>    			
+	    		</div>
     		</div>
     	</div>
     </section>

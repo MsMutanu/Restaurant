@@ -1,10 +1,10 @@
 @extends('layouts-frontend.app')
 @section('title', 'my shopping | Cofee')
 @section('content')
-  
+
 
     <section class="ftco-menu mb-5 pb-5">
-	 
+
     	<div class="container">
 
 			<div class="col-md-12 text-start ftco-animate">
@@ -14,10 +14,10 @@
 
     		<div class="row justify-content-center mb-0">
           <div class="col-md-7 heading-section text-center ftco-animate">
-			  
-          	
+
+
             <h2 class="mb-4">Our Products</h2>
-            
+
           </div>
         </div>
     		<div class="row d-md-flex">
@@ -35,10 +35,10 @@
 				  </div>
 
 		        <div class="col-md-12 d-flex align-items-center">
-		            
+
 				  <div class="tab-content ftco-animate" id="v-pills-tabContent">
 
-                        
+
 		              <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="v-pills-all-tab">
 		              	<div class="row">
 
@@ -55,21 +55,21 @@
 		              					<h3><a href="{{route('fontend.viewproduct',$item->id)}}">{{ $item->item_name}}</a></h3>
 		              					<p class="descriptions">{{ $item->description}}</p>
 		              					<p class="price"><span>Ksh {{ $item->price}}</span></p>
-		              					
-					<form action="{{route('carts.store')}}" method="POST"  enctype="multipart/form-data">
+
+					<form action="{{route('cart.add')}}" method="POST"  enctype="multipart/form-data">
                        @csrf
-					 
-	             	 <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">                    
-                    <input type="hidden" name="total" value="1" class="form-control">     
+
+	             	 <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">
+                    <input type="hidden" name="total" value="1" class="form-control">
                     <input type="hidden" name="price" value="{{$item->price}}" class="form-control">
-					<input type="hidden" name="quantity" value="1">  
-    
+					<input type="hidden" name="quantity" value="1">
+
 						@if (Route::has('login'))
 						@auth
 						<button type="submit" class="btn btn-primary pull-right mt-4">Add to Cart</button>
 							@else
 							<button class="btn btn-primary pull-right mt-4"><a class="text-dark" href="{{route('user.login')}}">Add to Cart</a></button>
-													
+
 						@endauth
 						@endif
 						 <div class="clearfix"></div>
@@ -78,12 +78,12 @@
 		              			</div>
 		              		</div>
 						</a>
-					    @endforeach  
+					    @endforeach
 
 
 		              	</div>
 		              </div>
-					  
+
 					@foreach($categories as $key=>$category)
 		              <div class="tab-pane fade show {{$key==0 ? 'active' : ''}}" id="{{$category->id}}" role="tabpanel" aria-labelledby="v-pills-{{$category->id}}-tab">
 		              	<div class="row">
@@ -102,20 +102,20 @@
 		              					<p class="descriptions">{{ $item->description}}</p>
 		              					<p class="price"><span>Ksh {{ $item->price}}</span></p>
 
-		            <form action="{{route('carts.store')}}" method="POST"  enctype="multipart/form-data">
+		            <form action="{{route('cart.add')}}" method="POST"  enctype="multipart/form-data">
                        @csrf
-					 
-	             	 <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">                    
-                    <input type="hidden" name="total" value="1" class="form-control">     
+
+	             	 <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">
+                    <input type="hidden" name="total" value="1" class="form-control">
                     <input type="hidden" name="price" value="{{$item->price}}" class="form-control">
-					<input type="hidden" name="quantity" value="1">  
-    
+					<input type="hidden" name="quantity" value="1">
+
 						@if (Route::has('login'))
 						@auth
 						<button type="submit" class="btn btn-primary pull-right mt-4">Add to Cart</button>
 							@else
 							<button class="btn btn-primary pull-right mt-4"><a class="text-dark" href="{{route('user.login')}}">Add to Cart</a></button>
-													
+
 						@endauth
 						@endif
 						 <div class="clearfix"></div>
@@ -124,21 +124,21 @@
 		              			</div>
 		              		</div>
 						</a>
-					    @endforeach  
+					    @endforeach
 
 
 		              	</div>
 		              </div>
 					  @endforeach
- 
+
 
                     </div>
-					
+
 		          </div>
 		        </div>
 		      </div>
 		    </div>
     	</div>
     </section>
- 
+
   @endsection

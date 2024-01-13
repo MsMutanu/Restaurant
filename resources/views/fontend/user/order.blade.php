@@ -1,16 +1,16 @@
 @extends('layouts-frontend.app')
-@section('title', 'order | Cofee')
- 
- 
+@section('title', 'order ')
+
+
 @push('css')
     <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-  <link rel="stylesheet" href="{{asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}"> 
+  <link rel="stylesheet" href="{{asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
 @endpush
- 
- 
+
+
   @section('content')
-  
+
     <!-- Main content -->
     <section class="content mb-5">
       	<div class="container mb-md-3 mt-lg-5">
@@ -29,35 +29,35 @@
           <div class="container">
 
             <div class="card border-0 text-white bg-transparent">
-            
+
               <div class="card-body shadow-none p-0 m-0" >
                @if($userorderscount >=1)
-               
+
                 <table id="example1" class="table table-striped table-sm border-0 bg-transparent scroll">
                   <thead>
                   <tr>
                         <th>Order Id</th>
-                        <th>product Id</th>
-                        <th>Product name</th>
+
+
                         <th>sub total</th>
                         <th>discount</th>
                         <th>tax</th>
-                        <th>total</th> 
+                        <th>total</th>
                         <th>Name</th>
                         <th>email</th>
                         <th>Order Date</th>
                         <th>status</th>
-                         
+
                   </tr>
                   </thead>
                   <tbody>
-                  
-                   
+
+
                     @foreach($userorders as $key => $order)
                       <tr>
                         <td>{{$order->id}}</td>
-                        <td>CF-{{$order->item_id}}</td>
-                        <td>{{$order->item->item_name}}</td> 
+
+
                         <td>Ksh {{$order->subtotal}}</td>
                         <td>Ksh {{$order->discount}}</td>
                         <td>Ksh {{$order->tax}}</td>
@@ -65,18 +65,11 @@
                         <td>{{$order->firstname}} {{$order->lastname}}</td>
                           <td>{{$order->email}}</td>
                          <td>{{$order->created_at}}</td>
-                        <td>
-                          @if($order->status==1)
-                           <span class="badge badge-success p-1">Confirmed</span>
-                            @endif
-                           @if($order->status==0)
-                           <span class="badge badge-danger p-1">Pending</span>
-                            @endif
-                        </td>
-                      
+                        <td>{{$order->status}}</td>
+
                       </tr>
                        @endforeach
-                    
+
                 </table>
                  @else
                 <div class="container">
@@ -88,7 +81,7 @@
                   </div>
                 </div>
                  @endif
-                  
+
               </div>
               <!-- /.card-body -->
             </div>
@@ -101,7 +94,7 @@
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-    
+
 @endsection
 
 
@@ -110,16 +103,16 @@
 <script src="{{asset('backend/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script> 
+<script src="{{asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 <script>
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": true,
-       
+
     }).buttons().container().appendTo('#example1_wrapper .col-sm-6:eq(0)');
     $('#example1').DataTable({
       "paging": true,
-      "lengthChange": false, 
+      "lengthChange": false,
       "info": true,
       "autoWidth": true,
       "responsive": true,

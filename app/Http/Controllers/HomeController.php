@@ -3,25 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Item; 
+use App\Models\Item;
 use App\Models\RestaurantTables;
 use App\Models\Slider;
 use App\Models\Category;
+use App\Models\UserOrder;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
 
- 
+
     public function index()
     {
-        
+
         $categorys = Category::all();
         $items = Item::all();
         $tables = RestaurantTables::all();
 
         //$item = Item::where('category_id', Category::category()->id)->get();
-        
+
          return view('fontend.index', compact('tables', 'categorys','items'));
     }
     public function contact()
@@ -46,20 +48,33 @@ class HomeController extends Controller
          return view('fontend.blogsingle');
     }
 
- 
+
     public function menu()
-    {
-          //$products = DB::table('items')->where('category_id', $category->id)->orderBy('created_at','DESC')->get()->take(1);
-		 $products = Item::orderBy('created_at','DESC')->get()->take(8);
-         //$categories = Category::whereIn('id',$cats)->get();
-         //$category = Category::find(1);
-        // $cats = explode(',', $category->id);
-         $categories = Category::all();
-         //$no_of_products = $category->id;
- 
-         return view('fontend.menu', compact('categories'));
- 
-    }
+{
+    $products = Item::orderBy('created_at', 'DESC')->get()->take(8);
+    $categories = Category::all();
+    $userOrder = UserOrder::where('user_id', Auth::id())->where('status', 'cart')->first();
+
+    // if (!$userOrder) {
+    //     $cartItems = []; // If no cart is found, initialize an empty array.
+    //     $cartTotal = 0;
+    // } else {
+        // Get the items in the cart along with their quantity
+        $cartItems = $userOrder->items;
+
+        // Calculate the total cost by looping through the items
+        $cartTotal = 0;
+        foreach ($cartItems as $item) {
+            $cartTotal += $item->price * $item->pivot->quantity;
+        }
+
+    //dd($cartItems);
+
+    return view('fontend.menu', compact('categories', 'cartItems', 'cartTotal'));
+}
+
+
+
     public function services()
     {
         $carts = Cart::all();
@@ -71,7 +86,7 @@ class HomeController extends Controller
           $products = Item::orderBy('created_at','DESC')->get()->take(8);
          $categories = Category::all();
          return view('fontend.shop', compact('categories'));
- 
+
     }
 
     public function productsingle()
@@ -80,9 +95,9 @@ class HomeController extends Controller
         $categorys = Category::all();
         $items = Item::all();
         return view('fontend.product-single', compact('sliders', 'categorys','items'));
-      
+
     }
 
 
-  
+
 }

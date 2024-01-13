@@ -1,20 +1,20 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
- 
-use App\Models\Userorder;
+
+use App\Models\UserOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OrderConfirmed;
-use Brian2694\Toastr\Facades\Toastr; 
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Notification;
 
 class UserOrderController extends Controller
 {
     public function index()
     {
-        $orders = Userorder::all();
+        $orders = UserOrder::all();
         return view('admin.order.index', compact('orders'));
     }
 
@@ -37,10 +37,10 @@ class UserOrderController extends Controller
             'tax' => 'required',
             'total' => 'required',
             'optradio' => 'required'
-             
+
         ]);
-  
-        $item = new Userorder();
+
+        $item = new UserOrder();
         $item->user_id = Auth::user()->id;
         $item->firstname= $request->firstname;
         $item->lastname= $request->lastname;
@@ -60,7 +60,7 @@ class UserOrderController extends Controller
         $item->payment_method= $request->optradio;
         $item->table_id=$request->table_id;
         $item->status = false;
-          
+
         $item->save();
         Toastr::success('Your Orders Submit Successfully', 'success', ["positionClass" => "toast-top-right"]);
         return redirect()->route('fontend.staying');
@@ -69,15 +69,15 @@ class UserOrderController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'status' => 'required' 
-             
+            'status' => 'required'
+
         ]);
 
-         $order = Userorder::find($id);
+         $order = UserOrder::find($id);
          $order->status = $request->status;
-          
+
          $order->save();
-         
+
          Toastr::success('order confirmed Successfully', 'success', ["positionClass" => "toast-top-right"]);
          return redirect()->back();
     }
@@ -85,25 +85,25 @@ class UserOrderController extends Controller
     public function cancelOrder(Request $request, $id)
     {
         $this->validate($request,[
-            'status' => 'required' 
-             
+            'status' => 'required'
+
         ]);
 
-         $order = Userorder::find($id);
+         $order = UserOrder::find($id);
          $order->status = $request->status;
-          
+
          $order->save();
-         
+
          Toastr::success('order cancel Successfull.', 'success', ["positionClass" => "toast-top-right"]);
          return redirect()->back();
     }
 
     public function destroy($id)
     {
-        $order = Userorder::find($id);
+        $order = UserOrder::find($id);
         $order->delete();
         return redirect()->route('order.index');
 
     }
-     
+
 }

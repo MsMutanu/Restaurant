@@ -16,13 +16,13 @@ class RestaurantTables extends Model
 	protected $table = 'restauranttables';
     protected $fillable = ['name', 'capacity', 'status'];
 
-   
 
 
 
-	public function Userorder()
+
+	public function UserOrder()
 	{
-		return $this->hasMany('App\Models\Userorder');
+		return $this->hasMany('App\Models\UserOrder');
 	}
 
 	public function reservation()

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Gate;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -20,9 +21,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password', 
+        'password',
         'is_admin',
-        'phone', 
+        'phone',
     ];
 
     /**
@@ -45,6 +46,18 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-  
-  
+
+public function isKitchenStaff()
+{
+    return Gate::allows('kitchen-staff');
+}
+
+public function isWaiter()
+{
+    return Gate::allows('waiter');
+}
+
+
+
+
 }

@@ -1,7 +1,7 @@
 @extends('layouts-frontend.app')
 @section('title', 'product single | Cofee')
 @section('content')
-  
+
 
     <section class="ftco-section">
 		<div class="container mb-lg-5">
@@ -21,7 +21,7 @@
     			</div>
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
 
-				<form action="{{route('carts.store')}}" method="POST"  enctype="multipart/form-data">
+				<form action="{{route('cart.add')}}" method="POST"  enctype="multipart/form-data">
                        @csrf
 
                        @if ($errors->any())
@@ -39,7 +39,7 @@
     				<p>{{$viewproduct->description}}</p>
     				 <div class="row mt-4">
 							<div class="col-md-6">
-					 
+
 							</div>
 							<div class="w-100"></div>
 				<div class="input-group col-md-6 d-flex mb-3">
@@ -49,37 +49,37 @@
 	                	</button>
 	            		</span>
 	             	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
-	             	
+
 					 <span class="input-group-btn ml-2">
 	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
 	                     <i class="icon-plus"></i>
 	                 </button>
 	             	</span>
 
-                       
+
 					<span class="input-group-btn ml-2">
 	                <input type="text" id="price" name="price" class="form-control input-number w-100 border-0 mt-2" value="{{$viewproduct->price}}" min="{{$viewproduct->price}}" max="1000">
-	             	</span> 
-					  
-                    <input type="hidden" name="item_id" value="{{$viewproduct->id}}" class="form-control">                    
-                    <input type="hidden" name="total" value="1" class="form-control">     
-                    
+	             	</span>
+
+                    <input type="hidden" name="item_id" value="{{$viewproduct->id}}" class="form-control">
+                    <input type="hidden" name="total" value="1" class="form-control">
+
 					@if (Route::has('login'))
 					@auth
 					<button type="submit" class="btn btn-primary pull-right mt-4"><span class="text-dark">Add to Cart</span></button>
 						@else
 						<button class="btn btn-primary pull-right mt-4"><a class="text-dark" href="{{route('user.login')}}">Add to Cart</a></button>
-												
+
 					@endauth
 					@endif
                      <div class="clearfix"></div>
                   </form>
 
- 
+
 	          	</div>
           	 </div>
           	</div>
-            
+
     	</div>
       </div>
     </section>
@@ -92,21 +92,21 @@
     var fixprice = parseInt('{{$viewproduct->price}}');
 
 		   $('.quantity-right-plus').click(function(e){
-		        
+
 		        // Stop acting like a button
 		        e.preventDefault();
 		        // Get the field name
 		        var quantity = parseInt($('#quantity').val());
 		        var price = parseInt($('#price').val());
-		        
+
 		        // If is not undefined
-		            
+
 		            $('#quantity').val(quantity + 1);
 		            $('#price').val(price + fixprice);
 
-		          
+
 		            // Increment
-		        
+
 		    });
 
 		     $('.quantity-left-minus').click(function(e){
@@ -115,28 +115,28 @@
 		        // Get the field name
 		        var quantity = parseInt($('#quantity').val());
 				var price = parseInt($('#price').val());
-		        
-		        
+
+
 		        // If is not undefined
-		      
+
 		            // Increment
 		            if(quantity>0){
 		            $('#quantity').val(quantity - 1);
 					$('#price').val(price - fixprice);
 		            }
 		    });
-		    
+
 		});
 	</script>
- 
+
  @endpush
     <section class="ftco-section">
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-3">
           <div class="col-md-7 heading-section ftco-animate text-center">
-          	
+
             <h2 class="mb-4">Related products</h2>
-            
+
           </div>
         </div>
         <div class="row">
@@ -149,7 +149,7 @@
     						<p class="descriptions">{{$item->description}}</p>
     						<p class="price"><span>$ {{$item->price}}</span></p>
 
-					<form action="{{route('carts.store')}}" method="POST"  enctype="multipart/form-data">
+					<form action="{{route('cart.add')}}" method="POST"  enctype="multipart/form-data">
                        @csrf
 
                        @if ($errors->any())
@@ -162,17 +162,17 @@
                             </div>
                         @endif
 
-                   
-                    <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">                    
-                    <input type="hidden" name="quantity" value="1" class="form-control">                        
-                    <input type="hidden" name="total" value="1" class="form-control">     
-                    <input type="hidden" name="price" value="{{$item->price}}" class="form-control">  
-                         
-                  
+
+                    <input type="hidden" name="item_id" value="{{$item->id}}" class="form-control">
+                    <input type="hidden" name="quantity" value="1" class="form-control">
+                    <input type="hidden" name="total" value="1" class="form-control">
+                    <input type="hidden" name="price" value="{{$item->price}}" class="form-control">
+
+
                     <button type="submit" class="btn btn-primary pull-right mt-4">Add to Cart</button>
                     <div class="clearfix"></div>
                   </form>
-				 
+
     				 </div>
     				</div>
         	</div>
@@ -180,5 +180,5 @@
         </div>
     	</div>
     </section>
-  
+
   @endsection

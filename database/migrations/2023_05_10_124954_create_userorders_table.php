@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserordersTable extends Migration
+class CreateUserOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,8 +20,8 @@ class CreateUserordersTable extends Migration
             $table->string('subtotal');
             $table->string('discount');
             $table->string('tax');
-            $table->string('total'); 
-            $table->string('quantity')->default('1'); 
+            $table->string('total');
+            $table->string('quantity')->default('1');
             $table->string('firstname');
             $table->string('lastname');
             $table->string('country');

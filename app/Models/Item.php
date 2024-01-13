@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    
+
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
     }
-   
+
     public function subitem()
     {
      return $this->hasMany('App\Models\Subitem');
@@ -24,18 +24,18 @@ class Item extends Model
      return $this->hasMany('App\Models\Usercart');
       }
 
-    public function orders()
-    {
-     return $this->hasMany('App\Models\Order');
-      }
 
     public function userorders()
     {
-      return $this->hasMany('App\Models\Userorder');
+      return $this->hasMany('App\Models\UserOrder');
     }
 
     public function carts()
     {
       return $this->hasMany('App\Models\Cart');
+    }
+    public function orders()
+    {
+        return $this->belongsToMany(UserOrder::class, 'carts', 'item_id', 'userorder_id')->withPivot('quantity');
     }
 }

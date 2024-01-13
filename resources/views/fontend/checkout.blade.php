@@ -1,10 +1,10 @@
 @extends('layouts-frontend.app')
 @section('title', 'checkout ')
 @section('content')
- 
-     
-          
-     
+
+
+
+
 
     <section class="ftco-section">
       <div class="container">
@@ -18,9 +18,9 @@
    @if (Route::has('login'))
     @auth
 			<div class="col-xl-8 ftco-animate">
-			<form action="{{route('order.store')}}" method="POST" class="billing-form ftco-bg-dark p-3 p-md-5">
-				
-		  
+			<form action="{{route('confirm.order')}}" method="POST" class="billing-form ftco-bg-dark p-3 p-md-5">
+
+
 			 @csrf
 
                        @if ($errors->any())
@@ -34,7 +34,7 @@
                         @endif
 
 				<h3 class="mb-4 billing-heading">Billing Details</h3>
-		  
+
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
 	                <div class="form-group">
@@ -48,22 +48,22 @@
 	                  <input type="text" name="lastname" class="form-control" placeholder="">
 	                </div>
                 </div>
-				<div class="form-group">
+				<div class="form-group ">
 					<label for="table_id">Choose a Table</label>
-					<select name="table_id" id="table_id" class="form-control" style="background-color:black; color: white;">
+					<select name="table_id" id="table_id" class="form-control">
 						@foreach($restauranttables as $table)
-							<option value="{{ $table->id }}">{{ $table->table_name }}</option>
+							<option value="{{ $table->id }}">{{ $table->name }}</option>
 						@endforeach
 					</select>
 				</div>
-				
-				
+
+
                 <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">
 		            		<label for="country">State / Country</label>
 		            		<input type= "text" name="country" id="" class="form-control">
-		                  	
+
 		                </div>
 		            	</div>
 		            </div>
@@ -105,9 +105,9 @@
 	                  <input type="text" name="email" class="form-control" placeholder="">
 	                </div>
                 </div>
-               
+
 	            </div>
-	         
+
 
 
 
@@ -115,46 +115,10 @@
 	          	<div class="col-md-6 d-flex">
 	          		<div class="cart-detail cart-total ftco-bg-dark p-3 p-md-4">
 	          			<h3 class="billing-heading mb-4">Cart Total</h3>
+                          <p>Total: Ksh {{ $cartTotal }}</p>
 
-	          			<p class="d-flex">
-							     <input type="hidden" name="item_id" value="{{$cart->item_id}}">
-							     	<span>Quantity</span>
-		    						<span>  {{ $quantity = $cart->quantity }}</span>
-									<input type="hidden" name="quantity" value="{{$quantity}}">
-		    					</p>
 
-	          			<p class="d-flex">
-							     <span>Single Price</span>
-		    						<span> Ksh {{ $single_price = $cart->item->price}}</span>
-									<input type="hidden" name="subtotal" value="{{$single_price}}">
-		    					</p>
-
-	          			<p class="d-flex">
-							     <input type="hidden" name="item_id" value="{{$cart->item_id}}">
-							     	<span>Subtotal</span>
-		    						<span> Ksh {{ $price = $quantity * $single_price}}</span>
-									<input type="hidden" name="subtotal" value="{{$price}}">
-		    					</p>
-		    					<p class="d-flex">
-		    						<span>Delivery Charge</span>
-		    						<span>Ksh {{ $delevary =  30}}</span>
-									<input type="hidden" name="tax" value="{{$delevary}}">
-		    					</p>
- 
-
-		    					<p class="d-flex">
-		    						<span>Discount</span>
-		    						<span>Ksh{{ $discount = $price/100*2  }}</span>
-									<input type="hidden" name="discount" value="{{$discount}}">
-		    					</p>
-		    					<hr>
-		    					<p class="d-flex total-price">
-		    						<span>Total</span>
-		    						<span>Ksh {{ $total = $price + $delevary - $discount}}</span>
-									<input type="hidden" name="total" value="{{$total}}">
-								 
-		    					</p>
-								</div>
+					</div>
 	          	</div>
 	          	<div class="col-md-6">
 	          		<div class="cart-detail ftco-bg-dark p-3 p-md-4">
@@ -166,7 +130,7 @@
 											</div>
 										</div>
 									</div>
- 
+
 									<div class="form-group d-none">
 										<div class="col-md-12">
 											<div class="radio">
@@ -180,7 +144,7 @@
 											   <label><input type="radio" name="optradio" class="mr-2" value="cash on delivary"> Cash on delibary</label>
 											</div>
 										</div>
-									</div>									
+									</div>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="checkbox">
@@ -189,14 +153,14 @@
 										</div>
 									</div>
 									<button type="submit" name="submit" class="btn btn-primary py-3 px-4">Place an order</button>
-									 
+
 								</div>
 	          	</div>
 				   </form><!-- END -->
 	          </div>
-          
+
 			  @else
- 
+
 @section('content')
 <div class="row hold-transition login-page justify-content-center bg-white h-100" >
 <div class="col-md-4 login-box my-5">
@@ -207,10 +171,10 @@
     </div>
     <div class="card-body">
       <p class="login-box-msg">please login first</p>
- 
+
       <form action="{{route('userslogin')}}" method="POST">
          @csrf
-         
+
 
         <div class="input-group mb-3 border">
 
@@ -219,13 +183,13 @@
           <div class="input-group-append">
             <div class="input-group-text"> <span class="fas fa-envelope"></span> </div>
           </div>
-          
+
            @error('email')
             <span class="invalid-feedback" role="alert">
                 <strong style="color:red">{{ $message }}</strong>
             </span>
             @enderror
-                               
+
 
         </div>
 
@@ -268,7 +232,7 @@
           <!-- /.col -->
         </div>
       </form>
-  
+
       <p class="mb-1">
           @if (Route::has('password.request'))
             <a class="btn btn-link" href="{{ route('password.request') }}">
@@ -278,9 +242,9 @@
            </p>
 
           @if (Route::has('register'))
-                    
+
             <a href="{{ route('register') }}" class="btn btn-link">Register</a>
-                      
+
           @endif
     </div>
     <!-- /.card-body -->
@@ -290,18 +254,18 @@
 <!-- /.login-box -->
 </div>
 @endsection
- 
+
 	        @endauth
           @endif
           </div> <!-- .col-md-8 -->
- 
 
-			
 
-          
+
+
+
         </div>
       </div>
     </section> <!-- .section -->
- 
+
 
   @endsection

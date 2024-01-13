@@ -9,41 +9,41 @@
 	          <li class="nav-item {{Request::is('home*') ? 'active' : '' }}"><a href="{{route('fontend.index')}}" class="nav-link">Home</a></li>
 	          <li class="nav-item {{Request::is('menu') ? 'active' : '' }}"><a href="{{route('fontend.menu')}}" class="nav-link">Menu</a></li>
 	          <li class="nav-item {{Request::is('shop') ? 'active' : '' }}"><a href="{{route('fontend.shop')}}" class="nav-link">Our Products</a></li>
-	          <li class="nav-item {{Request::is('about') ? 'active' : '' }}"><a href="{{route('fontend.about')}}" class="nav-link">About</a></li>	          
-	           <li class="nav-item {{Request::is('reservation') ? 'active' : '' }}"><a href="{{route('fontend.reservation')}}" class="nav-link">Booking</a></li>	          
+	          <li class="nav-item {{Request::is('about') ? 'active' : '' }}"><a href="{{route('fontend.about')}}" class="nav-link">About</a></li>
+	           <li class="nav-item {{Request::is('reservation') ? 'active' : '' }}"><a href="{{route('fontend.reservation')}}" class="nav-link">Booking</a></li>
 	          <li class="nav-item {{Request::is('contact') ? 'active' : '' }}"><a href="{{route('fontend.contact')}}" class="nav-link">Contact</a></li>
-	          
-            @php
+
+            {{-- @php
             if(Auth()->user()){
             $cartcount = DB::table('carts')->where('user_id', Auth()->user()->id)->count();
               }else{
              }
-           @endphp
+           @endphp --}}
 
-           
-            <li class="nav-item cart {{Request::is('cart') ? 'active' : '' }}"><a href="{{route('fontend.cart')}}" class="nav-link"><span class="icon icon-shopping_cart"></span>
-             
-            @if (Route::has('login'))
+
+            <li class="nav-item cart {{Request::is('cart') ? 'active' : '' }}"><a href="{{route('cart.show')}}" class="nav-link"><span class="icon icon-shopping_cart"></span>
+
+            {{-- @if (Route::has('login'))
              @auth
              <span class="bag d-flex justify-content-center align-items-center"><small>{{ $cartcount}}</small></span>
               @endauth
-             @endif</a></li>
-	             
+             @endif</a></li> --}}
+
 
 
     @if (Route::has('login'))
     @auth
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" 
-			    aria-haspopup="true" aria-expanded="false"> 
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown"
+			    aria-haspopup="true" aria-expanded="false">
           <span class="badge badge-danger text-white shadow">{{ Auth::user()->name }}</span>
 			   <span class="icon icon-user" style="font-size: x-large; color:white"></span>
          </a>
         <div class="dropdown-menu" aria-labelledby="dropdown03">
              <a class="dropdown-item bg-transparent" href="{{route('fontend.profile')}}">Profile</a>
              <a class="dropdown-item bg-transparent" href="{{route('fontend.myorder')}}">My Orders</a>
-              
-                    
+
+
              <a class="dropdown-item bg-transparent" id="logout" href="{{ route('logout') }}"
               onclick="event.preventDefault();
               document.getElementById('logout-form').submit();">
@@ -52,20 +52,20 @@
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
               @csrf
-            </form> 
+            </form>
         </div>
             </li>
          @else
             <li class="nav-item mt-3">
                  <a href="{{ route('user.login') }}" class="px-3 text-white">Log in</a>
-             </li> 
-                
+             </li>
+
              @endauth
-                                
+
          @endif
 
 
- 
+
 			</ul>
 	      </div>
 		  </div>
